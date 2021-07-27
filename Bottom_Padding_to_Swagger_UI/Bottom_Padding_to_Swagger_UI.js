@@ -16,9 +16,13 @@
 // @updateURL    https://github.com/Yash-Singh1/UserScripts/raw/master/Bottom_Padding_to_Swagger_UI/Bottom_Padding_to_Swagger_UI.user.js
 // ==/UserScript==
 
-(function() {
-    'use strict';
-    if (document.querySelector('div#swagger-ui')) {
-        document.body.style.paddingBottom = '5%';
-    }
+(function () {
+  'use strict';
+  if (
+    document.querySelector('div#swagger-ui') &&
+    SwaggerUIStandalonePreset.filter((val) => typeof val !== 'function') &&
+    typeof SwaggerUIBundle === 'function'
+  ) {
+    document.body.style.paddingBottom = '5%';
+  }
 })();
