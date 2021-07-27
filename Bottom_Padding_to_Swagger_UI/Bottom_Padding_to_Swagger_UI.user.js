@@ -12,8 +12,8 @@
 // @homepageURL  https://github.com/Yash-Singh1/UserScripts/tree/master/Bottom_Padding_to_Swagger_UI#readme
 // @supportURL   https://github.com/Yash-Singh1/UserScripts/issues
 // @license      MIT
-// @downloadURL  https://github.com/Yash-Singh1/UserScripts/raw/master/Bottom_Padding_to_Swagger_UI/Bottom_Padding_to_Swagger_UI.user.js
-// @updateURL    https://github.com/Yash-Singh1/UserScripts/raw/master/Bottom_Padding_to_Swagger_UI/Bottom_Padding_to_Swagger_UI.user.js
+// @downloadURL  https://raw.githubusercontent.com/Yash-Singh1/UserScripts/main/Bottom_Padding_to_Swagger_UI/Bottom_Padding_to_Swagger_UI.user.js
+// @updateURL    https://raw.githubusercontent.com/Yash-Singh1/UserScripts/main/Bottom_Padding_to_Swagger_UI/Bottom_Padding_to_Swagger_UI.user.js
 // ==/UserScript==
 
 (function () {
