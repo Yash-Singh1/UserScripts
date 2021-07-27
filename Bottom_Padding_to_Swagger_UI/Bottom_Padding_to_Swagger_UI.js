@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bottom Padding to Swagger UI
 // @namespace    https://github.com/Yash-Singh1/UserScripts
-// @version      0.2
+// @version      1.0
 // @description  Adds bottom padding to the Swagger UI
 // @author       Yash Singh
 // @match        https://*/*
