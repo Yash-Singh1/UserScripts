@@ -16,10 +16,13 @@
 // @updateURL    https://raw.githubusercontent.com/Yash-Singh1/UserScripts/main/Bottom_Padding_to_Swagger_UI/Bottom_Padding_to_Swagger_UI.user.js
 // ==/UserScript==
 
+/* global SwaggerUIStandalonePreset */
+
 (function () {
   'use strict';
   if (
     document.querySelector('div#swagger-ui') &&
+    Array.isArray(SwaggerUIStandalonePreset) &&
     SwaggerUIStandalonePreset.filter((val) => typeof val !== 'function') &&
     typeof SwaggerUIBundle === 'function'
   ) {
