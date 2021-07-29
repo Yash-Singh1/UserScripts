@@ -7,8 +7,8 @@
 // @match        https://gist.github.com/*
 // @icon         https://github.githubassets.com/favicons/favicon.svg
 // @grant        none
-// @homepage     https://github.com/Yash-Singh1/UserScripts/tree/master/Disable_Comment_on_Empty_Field#readme
-// @homepageURL  https://github.com/Yash-Singh1/UserScripts/tree/master/Disable_Comment_on_Empty_Field#readme
+// @homepage     https://github.com/Yash-Singh1/UserScripts/tree/main/Disable_Comment_on_Empty_Field#readme
+// @homepageURL  https://github.com/Yash-Singh1/UserScripts/tree/main/Disable_Comment_on_Empty_Field#readme
 // @supportURL   https://github.com/Yash-Singh1/UserScripts/issues
 // @license      MIT
 // @downloadURL  https://raw.githubusercontent.com/Yash-Singh1/UserScripts/main/Disable_Comment_on_Empty_Field/Disable_Comment_on_Empty_Field.user.js
