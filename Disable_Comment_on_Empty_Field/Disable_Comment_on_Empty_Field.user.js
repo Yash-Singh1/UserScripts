@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Disable Comment Button in Empty Fields
 // @namespace    https://github.com/Yash-Singh1/UserScripts
-// @version      0.1
+// @version      1.0
 // @description  Disables the comment button on empty textarea in gists
 // @author       Yash Singh
 // @match        https://gist.github.com/*
