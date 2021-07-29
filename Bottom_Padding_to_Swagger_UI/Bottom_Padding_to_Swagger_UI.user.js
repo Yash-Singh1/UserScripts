@@ -8,8 +8,8 @@
 // @match        http://*/*
 // @icon         https://petstore.swagger.io/favicon-32x32.png
 // @grant        none
-// @homepage     https://github.com/Yash-Singh1/UserScripts/tree/master/Bottom_Padding_to_Swagger_UI#readme
-// @homepageURL  https://github.com/Yash-Singh1/UserScripts/tree/master/Bottom_Padding_to_Swagger_UI#readme
+// @homepage     https://github.com/Yash-Singh1/UserScripts/tree/main/Bottom_Padding_to_Swagger_UI#readme
+// @homepageURL  https://github.com/Yash-Singh1/UserScripts/tree/main/Bottom_Padding_to_Swagger_UI#readme
 // @supportURL   https://github.com/Yash-Singh1/UserScripts/issues
 // @license      MIT
 // @downloadURL  https://raw.githubusercontent.com/Yash-Singh1/UserScripts/main/Bottom_Padding_to_Swagger_UI/Bottom_Padding_to_Swagger_UI.user.js
