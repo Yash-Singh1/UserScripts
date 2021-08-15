@@ -19,14 +19,14 @@
 (function () {
   'use strict';
 
+  if (!document.getElementById('PXPMessages')) {
+    return;
+  }
+
   const searchParams = new URLSearchParams(location.search);
 
   if (!searchParams.get('PAGE')) {
     location.search = location.search + '&PAGE=0';
-  }
-
-  if (!document.getElementById('PXPMessages')) {
-    return;
   }
 
   function markAllUnreadFn() {
