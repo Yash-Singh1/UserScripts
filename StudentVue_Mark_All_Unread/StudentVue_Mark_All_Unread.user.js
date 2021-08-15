@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         StudentVue Mark All Unread
 // @namespace    https://github.com/Yash-Singh1/UserScripts
-// @version      0.1
+// @version      0.2
 // @description  Marks all StudentVue/ParentVue messages as unread (button)
 // @author       Yash Singh
 // @match        https://*/*
