@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UserScripts</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css"
+      integrity="sha512-1cK78a1o+ht2JcaW6g8OXYwqpev9+6GqOkz9xmBN9iUUhIndKtxwILGWYOSibOKjLsEdjyjZvYDq/cZwNeak0w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"
+      integrity="sha512-A7AYk1fGKX6S2SsHywmPkrnzTZHrgiVT7GcQkLGDe2ev0aWb8zejytzS8wjo7PGEXKqJOrjQ4oORtnimIRZBtw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
+  <body>
+    <style>
+      @import url('https://fonts.googleapis.com/css?family=Baloo+Bhai+2:wght@600');
+
+      body {
+        background-color: rgb(212, 99, 99);
+        font-family: 'Baloo Bhai 2', cursive;
+      }
+
+      body,
+      html {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      hr {
+        opacity: 20%;
+      }
+
+      .jumbotron {
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: left;
+        width: 100%;
+        height: 100%;
+      }
+
+      h1.display-4 > a {
+        text-decoration: none;
+        color: white;
+      }
+
+      .jumbotron > .container-fluid > * {
+        margin-left: 20px;
+      }
+
+      .row {
+        display: flex;
+        align-items: stretch;
+        color: black;
+      }
+
+      .card {
+        margin: 10px;
+        padding-bottom: 30px;
+        width: 18rem;
+        height: 325px;
+      }
+
+      .card a {
+        position: absolute;
+        bottom: 10px;
+      }
+    </style>
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container-fluid" data-aos="fade-down">
+        <h1 class="display-4"><a href="https://github.com/Yash-Singh1/UserScripts">UserScripts</a></h1>
+        <p class="lead">
+          Various <a href="https://www.tampermonkey.net/" target="__blank">TamperMonkey</a> UserScripts to help improve your browser experience
+        </p>
+      </div>
+      <div class="row">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Bottom Padding to Swagger UI</h5>
+            <p class="card-text">Adds bottom padding to the Swagger UI to improve scrolling.</p>
+            <a href="https://github.com/Yash-Singh1/UserScripts/tree/main/Bottom_Padding_to_Swagger_UI" class="btn btn-primary">See on GitHub</a>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Disable Comment on Empty Field</h5>
+            <p class="card-text">Fixes a bug that occurs sometimes in Gists that makes the "Comment" field avaliable even when the input is empty.</p>
+            <a href="https://github.com/Yash-Singh1/UserScripts/tree/main/Disable_Comment_on_Empty_Field" class="btn btn-primary">See on GitHub</a>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">StudentVue Mark All Read</h5>
+            <p class="card-text">
+              Sometimes, when you are using the StudentVue/ParentVue Synergy Application, your notifications start piling up till there are hundreds
+              of them. To me it is a bit annoying to see those popups. This user script adds a mark all as Read button on the messages tab.
+            </p>
+            <a href="https://github.com/Yash-Singh1/UserScripts/tree/main/StudentVue_Mark_All_Read" class="btn btn-primary">See on GitHub</a>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">No Overflow X on GitHub Keyboard Shortcuts</h5>
+            <p class="card-text">Removes that horizontal scrollbar on the GitHub Keyboard Shortcuts.</p>
+            <a href="https://github.com/Yash-Singh1/UserScripts/tree/main/No_Overflow_X_on_GitHub_Keyboard_Shortcuts" class="btn btn-primary"
+              >See on GitHub</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      AOS.init();
+    </script>
+  </body>
+</html>
