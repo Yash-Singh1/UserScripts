@@ -32,12 +32,20 @@
   function markAllRead() {
     document.querySelectorAll('.UnreadMessage').forEach((el) => el.click());
     const nextPageBtn = [...document.querySelectorAll('#MainDiv a')].find(
-      (el) => el.href.includes('AGU=') && el.href.includes('PAGE=') && el.innerHTML.toLowerCase().includes('next')
+      (el) =>
+        el.href.includes('AGU=') &&
+        el.href.includes('PAGE=') &&
+        el.innerHTML.toLowerCase().includes('next')
     );
     if (nextPageBtn) {
-      location.href = nextPageBtn.href + '&READ=true&READ_PAGE=' + (searchParams.get('READ_PAGE') || searchParams.get('PAGE'));
+      location.href =
+        nextPageBtn.href +
+        '&READ=true&READ_PAGE=' +
+        (searchParams.get('READ_PAGE') || searchParams.get('PAGE'));
     } else if (searchParams.get('READ') === 'true') {
-      location.search = location.search.replace(/(PAGE=)\d+/, '$1' + searchParams.get('READ_PAGE')).replace(/&READ=true&READ_PAGE=\d+/, '');
+      location.search = location.search
+        .replace(/(PAGE=)\d+/, '$1' + searchParams.get('READ_PAGE'))
+        .replace(/&READ=true&READ_PAGE=\d+/, '');
     }
   }
 
@@ -46,7 +54,8 @@
   }
 
   let markAllReadBtn = document.createElement('div');
-  markAllReadBtn.innerHTML = '<div class="layout-column"><a style="cursor: pointer;" id="mark-all-read">Mark All As Read</a></div>';
+  markAllReadBtn.innerHTML =
+    '<div class="layout-column"><a style="cursor: pointer;" id="mark-all-read">Mark All As Read</a></div>';
   markAllReadBtn.classList.add('layout-table');
   markAllReadBtn.classList.add('middle');
   markAllReadBtn.classList.add('padded');

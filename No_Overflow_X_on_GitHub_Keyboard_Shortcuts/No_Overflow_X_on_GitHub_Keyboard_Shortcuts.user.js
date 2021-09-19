@@ -16,15 +16,19 @@
 // ==/UserScript==
 
 (function () {
-  "use strict";
+  'use strict';
 
   setInterval(() => {
     const keyboardShortcutBox = document.querySelector(
-      "body > details > details-dialog > div > div.Box-body.p-0.overflow-scroll"
+      'body > details > details-dialog > div > div.Box-body.p-0.overflow-scroll'
     );
 
     if (keyboardShortcutBox) {
-      keyboardShortcutBox.style.setProperty('overflow-x', 'hidden', 'important');
+      keyboardShortcutBox.style.setProperty(
+        'overflow-x',
+        'hidden',
+        'important'
+      );
     }
   }, 1000);
 })();

@@ -27,7 +27,7 @@
   </head>
   <body>
     <style>
-      @import url('https://fonts.googleapis.com/css?family=Baloo+Bhai+2:wght@600');
+      @import url('https://fonts.googleapis.com/css2?family=Baloo+Bhai+2:wght@500;600&display=swap');
 
       body {
         background-color: rgb(212, 99, 99);
@@ -51,12 +51,13 @@
         align-items: center;
         justify-content: left;
         width: 100%;
-        height: 90%;
+        height: 100%;
       }
 
       h1.display-4 > a {
         text-decoration: none;
         color: white;
+        font-weight: 600;
       }
 
       .jumbotron > .container-fluid > * {
@@ -65,6 +66,7 @@
 
       .row {
         display: flex;
+        flex-flow: row wrap;
         align-items: stretch;
         color: black;
       }
@@ -99,63 +101,152 @@
 
       #more {
         width: 100%;
-        height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
+        padding: 20px;
+        overflow: hidden;
+        min-height: 100%;
+      }
+
+      .install {
+        margin-left: 30%;
       }
     </style>
     <div class="jumbotron jumbotron-fluid">
       <div class="container-fluid" data-aos="fade-down">
-        <h1 class="display-4"><a href="https://github.com/Yash-Singh1/UserScripts">UserScripts</a></h1>
+        <h1 class="display-4">
+          <a href="https://github.com/Yash-Singh1/UserScripts">UserScripts</a>
+        </h1>
         <p class="lead">
-          Various <a href="https://www.tampermonkey.net/" target="__blank">TamperMonkey</a> UserScripts to help improve your browser experience
+          Various
+          <a href="https://www.tampermonkey.net/" target="__blank">
+            TamperMonkey
+          </a>
+          UserScripts to help improve your browser experience
         </p>
+        <p class="lead">
+          Made with ❤️ by
+          <a href="https://github.com/Yash-Singh1" target="__blank">
+            Yash Singh
+          </a>
+        </p>
+        <button class="btn btn-primary" onclick="scrollMore()">
+          Get Started
+        </button>
       </div>
-      <div class="row">
+    </div>
+    <div id="more">
+      <div class="row justify-content-center">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">
+              AWS Federation Shell Environment Variables
+            </h5>
+            <p class="card-text">
+              Adds a button to the AWS Federation UI to copy code to paste into
+              the shell.
+            </p>
+            <a
+              href="https://github.com/Yash-Singh1/UserScripts/tree/main/AWS_Federation_Shell_Environment_Variables#readme"
+              class="btn btn-primary"
+            >
+              GitHub
+            </a>
+            <a
+              href="https://github.com/Yash-Singh1/UserScripts/raw/main/AWS_Federation_Shell_Environment_Variables/AWS_Federation_Shell_Environment_Variables.user.js"
+              class="install btn btn-primary"
+            >
+              Install
+            </a>
+          </div>
+        </div>
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Bottom Padding to Swagger UI</h5>
-            <p class="card-text">Adds bottom padding to the Swagger UI to improve scrolling.</p>
-            <a href="https://github.com/Yash-Singh1/UserScripts/tree/main/Bottom_Padding_to_Swagger_UI" class="btn btn-primary">See on GitHub</a>
+            <p class="card-text">
+              Adds bottom padding to the Swagger UI to improve scrolling.
+            </p>
+            <a
+              href="https://github.com/Yash-Singh1/UserScripts/tree/main/Bottom_Padding_to_Swagger_UI#readme"
+              class="btn btn-primary"
+            >
+              GitHub
+            </a>
+            <a
+              href="https://github.com/Yash-Singh1/UserScripts/raw/main/Bottom_Padding_to_Swagger_UI/Bottom_Padding_to_Swagger_UI.user.js"
+              class="install btn btn-primary"
+            >
+              Install
+            </a>
           </div>
         </div>
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Disable Comment on Empty Field</h5>
-            <p class="card-text">Fixes a bug that occurs sometimes in Gists that makes the "Comment" field avaliable even when the input is empty.</p>
-            <a href="https://github.com/Yash-Singh1/UserScripts/tree/main/Disable_Comment_on_Empty_Field" class="btn btn-primary">See on GitHub</a>
+            <p class="card-text">
+              Fixes a bug that occurs sometimes in Gists that makes the
+              "Comment" field avaliable even when the input is empty.
+            </p>
+            <a
+              href="https://github.com/Yash-Singh1/UserScripts/tree/main/Disable_Comment_on_Empty_Field#readme"
+              class="btn btn-primary"
+            >
+              GitHub
+            </a>
+            <a
+              href="https://github.com/Yash-Singh1/UserScripts/raw/main/Disable_Comment_on_Empty_Field/Disable_Comment_on_Empty_Field.user.js"
+              class="install btn btn-primary"
+            >
+              Install
+            </a>
           </div>
         </div>
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">StudentVue Mark All Read</h5>
             <p class="card-text">
-              Sometimes, when you are using the StudentVue/ParentVue Synergy Application, your notifications start piling up till there are hundreds
-              of them. To me it is a bit annoying to see those popups. This user script adds a mark all as Read button on the messages tab.
+              Sometimes, when you are using the StudentVue/ParentVue Synergy
+              Application, your notifications start piling up till there are
+              hundreds of them. To me it is a bit annoying to see those popups.
+              This user script adds a mark all as Read button on the messages
+              tab.
             </p>
-            <a href="https://github.com/Yash-Singh1/UserScripts/tree/main/StudentVue_Mark_All_Read" class="btn btn-primary">See on GitHub</a>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">No Overflow X on GitHub Keyboard Shortcuts</h5>
-            <p class="card-text">Removes that horizontal scrollbar on the GitHub Keyboard Shortcuts.</p>
-            <a href="https://github.com/Yash-Singh1/UserScripts/tree/main/No_Overflow_X_on_GitHub_Keyboard_Shortcuts" class="btn btn-primary"
-              >See on GitHub</a
+            <a
+              href="https://github.com/Yash-Singh1/UserScripts/tree/main/StudentVue_Mark_All_Read#readme"
+              class="btn btn-primary"
             >
+              GitHub
+            </a>
+            <a
+              href="https://github.com/Yash-Singh1/UserScripts/raw/main/StudentVue_Mark_All_Read/StudentVue_Mark_All_Read.user.js"
+              class="install btn btn-primary"
+            >
+              Install
+            </a>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="more" onclick="scrollMore()">See more &#9660;</div>
-    <div id="more">
-      <div class="row">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">AWS Federation Shell Environment Variables</h5>
-            <p class="card-text">Adds a button to the AWS Federation UI to copy code to paste into the shell.</p>
-            <a href="https://github.com/Yash-Singh1/UserScripts/tree/main/Bottom_Padding_to_Swagger_UI" class="btn btn-primary">See on GitHub</a>
+            <h5 class="card-title">
+              No Overflow X on GitHub Keyboard Shortcuts
+            </h5>
+            <p class="card-text">
+              Removes that horizontal scrollbar on the GitHub Keyboard
+              Shortcuts.
+            </p>
+            <a
+              href="https://github.com/Yash-Singh1/UserScripts/tree/main/No_Overflow_X_on_GitHub_Keyboard_Shortcuts#readme"
+              class="btn btn-primary"
+            >
+              GitHub
+            </a>
+            <a
+              href="https://github.com/Yash-Singh1/UserScripts/raw/main/No_Overflow_X_on_GitHub_Keyboard_Shortcuts/No_Overflow_X_on_GitHub_Keyboard_Shortcuts.user.js"
+              class="install btn btn-primary"
+            >
+              Install
+            </a>
           </div>
         </div>
       </div>

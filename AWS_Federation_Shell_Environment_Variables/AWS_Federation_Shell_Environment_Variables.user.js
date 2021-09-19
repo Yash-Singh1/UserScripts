@@ -33,19 +33,26 @@
   btn.id = 'copy-btn';
   btn.innerHTML = 'Copy Variables';
   btn.onclick = function () {
-    navigator.permissions.query({ name: 'clipboard-write' }).then((permissionStatus) => {
-      if (permissionStatus.state == 'granted' || permissionStatus.state == 'prompt') {
-        navigator.clipboard.writeText(credentials);
-        document.getElementById('copy-btn').innerHTML = 'Copied!';
-        document.getElementById('copy-btn').style.backgroundColor = 'green';
-        setTimeout(function () {
-          document.getElementById('copy-btn').innerHTML = 'Copy Variables';
-          document.getElementById('copy-btn').style.backgroundColor = 'gray';
-        }, 5000);
-      } else {
-        alert('Access was denied to clipboard-write, please give access to continue.');
-      }
-    });
+    navigator.permissions
+      .query({ name: 'clipboard-write' })
+      .then((permissionStatus) => {
+        if (
+          permissionStatus.state == 'granted' ||
+          permissionStatus.state == 'prompt'
+        ) {
+          navigator.clipboard.writeText(credentials);
+          document.getElementById('copy-btn').innerHTML = 'Copied!';
+          document.getElementById('copy-btn').style.backgroundColor = 'green';
+          setTimeout(function () {
+            document.getElementById('copy-btn').innerHTML = 'Copy Variables';
+            document.getElementById('copy-btn').style.backgroundColor = 'gray';
+          }, 5000);
+        } else {
+          alert(
+            'Access was denied to clipboard-write, please give access to continue.'
+          );
+        }
+      });
   };
 
   document.body.appendChild(btn);

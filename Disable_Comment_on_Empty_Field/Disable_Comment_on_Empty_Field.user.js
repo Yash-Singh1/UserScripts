@@ -16,34 +16,37 @@
 // ==/UserScript==
 
 (function () {
-  "use strict";
+  'use strict';
 
   if (
-    document.querySelector("#new_comment_field") &&
-    document.querySelector("#partial-new-comment-form-actions > button")
+    document.querySelector('#new_comment_field') &&
+    document.querySelector('#partial-new-comment-form-actions > button')
   ) {
     function checkAndDisable() {
       setTimeout(() => {
         if (
-          document.querySelector("#new_comment_field").value.length === 0 &&
-          !document.querySelector("#partial-new-comment-form-actions > button")
+          document.querySelector('#new_comment_field').value.length === 0 &&
+          !document.querySelector('#partial-new-comment-form-actions > button')
             .disabled
         ) {
           document.querySelector(
-            "#partial-new-comment-form-actions > button"
+            '#partial-new-comment-form-actions > button'
           ).disabled = true;
         } else if (
-          document.querySelector("#new_comment_field").value.length !== 0
+          document.querySelector('#new_comment_field').value.length !== 0
         ) {
           document.querySelector(
-            "#partial-new-comment-form-actions > button"
+            '#partial-new-comment-form-actions > button'
           ).disabled = false;
         }
       }, 0);
     }
 
     checkAndDisable();
-    document.querySelector("#new_comment_field").onchange =
-      document.querySelector("#new_comment_field").onkeydown = checkAndDisable;
+    document.querySelector(
+      '#new_comment_field'
+    ).onchange = document.querySelector(
+      '#new_comment_field'
+    ).onkeydown = checkAndDisable;
   }
 })();
