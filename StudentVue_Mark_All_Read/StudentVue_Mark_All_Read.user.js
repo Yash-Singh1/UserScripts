@@ -31,11 +31,14 @@
 
   function markAllRead() {
     document.querySelectorAll('.UnreadMessage').forEach((el) => el.click());
-    document
-      .querySelector(
-        '#viewMessageDialog > div > div > div.modal-footer > button'
-      )
-      .click();
+    const closeBtn = document.querySelector(
+      '#viewMessageDialog > div > div > div.modal-footer > button'
+    );
+
+    if (closeBtn) {
+      closeBtn.click();
+    }
+
     const nextPageBtn = [...document.querySelectorAll('#MainDiv a')].find(
       (el) =>
         el.href.includes('AGU=') &&
