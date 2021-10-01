@@ -53,14 +53,16 @@
     markAllRead();
   }
 
-  let markAllReadBtn = document.createElement('div');
-  markAllReadBtn.innerHTML =
-    '<div class="layout-column"><a style="cursor: pointer;" id="mark-all-read">Mark All As Read</a></div>';
-  markAllReadBtn.classList.add('layout-table');
-  markAllReadBtn.classList.add('middle');
-  markAllReadBtn.classList.add('padded');
-  markAllReadBtn.classList.add('divided');
-  markAllReadBtn.classList.add('pull-left');
-  document.querySelector('#MainDiv > h1').after(markAllReadBtn);
-  document.querySelector('#mark-all-read').onclick = markAllRead;
+  window.addEventListener('DOMContentLoaded', () => {
+    let markAllReadBtn = document.createElement('div');
+    markAllReadBtn.innerHTML =
+      '<div class="layout-column"><a style="cursor: pointer;" id="mark-all-read">Mark All As Read</a></div>';
+    markAllReadBtn.classList.add('layout-table');
+    markAllReadBtn.classList.add('middle');
+    markAllReadBtn.classList.add('padded');
+    markAllReadBtn.classList.add('divided');
+    markAllReadBtn.classList.add('pull-left');
+    document.querySelector('#MainDiv > h1').after(markAllReadBtn);
+    document.querySelector('#mark-all-read').onclick = markAllRead;
+  });
 })();
