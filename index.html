@@ -112,6 +112,23 @@
       .install {
         margin-left: 30%;
       }
+
+      ::-webkit-scrollbar {
+        background-color: #202324;
+        color: #aba499;
+      }
+
+      ::-webkit-scrollbar-corner {
+        background-color: #181a1b;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background-color: #454a4d;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background-color: #575e62;
+      }
     </style>
     <div class="jumbotron jumbotron-fluid">
       <div class="container-fluid" data-aos="fade-down">
@@ -134,7 +151,10 @@
         <button class="btn btn-primary" onclick="scrollMore()">
           Get Started
         </button>
-        <button class="btn btn-primary" onclick="window.open('https://github.com/Yash-Singh1/UserScripts')">
+        <button
+          class="btn btn-primary"
+          onclick="window.open('https://github.com/Yash-Singh1/UserScripts')"
+        >
           View on GitHub
         </button>
       </div>
