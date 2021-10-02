@@ -61,7 +61,10 @@
     markAllRead();
   }
 
-  window.addEventListener('DOMContentLoaded', () => {
+  let ran = false;
+
+  function loadEventListener() {
+    ran = true;
     let markAllReadBtn = document.createElement('div');
     markAllReadBtn.innerHTML =
       '<div class="layout-column"><a style="cursor: pointer;" id="mark-all-read">Mark All As Read</a></div>';
@@ -72,5 +75,11 @@
     markAllReadBtn.classList.add('pull-left');
     document.querySelector('#MainDiv > h1').after(markAllReadBtn);
     document.querySelector('#mark-all-read').onclick = markAllRead;
-  });
+  }
+
+  window.addEventListener('load', loadEventListener);
+
+  if (document.readyState === 'complete' && !ran) {
+    loadEventListener();
+  }
 })();
