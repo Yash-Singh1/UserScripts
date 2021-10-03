@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         DeltaMath Improvements
 // @namespace    https://github.com/Yash-Singh1/UserScripts
-// @version      0.2
+// @version      0.3
 // @description  Various Improvements to the DeltaMath Student Page
 // @author       Yash Singh
 // @match        https://www.deltamath.com/app/student/*
@@ -46,7 +46,7 @@
       stroke: black !important;
     }
 
-    span[style="color:red;"] {
+    span[style*="color:red;"] {
       color: black !important;
     }
 
