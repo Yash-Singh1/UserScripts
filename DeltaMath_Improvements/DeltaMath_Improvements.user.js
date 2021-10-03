@@ -8,6 +8,12 @@
 // @match        https://www.deltamath.com/app/student
 // @icon         https://deltamath.com/new3/images/flav3.png
 // @grant        none
+// @homepage     https://github.com/Yash-Singh1/UserScripts/tree/main/DeltaMath_Improvements#readme
+// @homepageURL  https://github.com/Yash-Singh1/UserScripts/tree/main/DeltaMath_Improvements#readme
+// @supportURL   https://github.com/Yash-Singh1/UserScripts/issues
+// @license      MIT
+// @downloadURL  https://raw.githubusercontent.com/Yash-Singh1/UserScripts/main/DeltaMath_Improvements/DeltaMath_Improvements.user.js
+// @updateURL    https://raw.githubusercontent.com/Yash-Singh1/UserScripts/main/DeltaMath_Improvements/DeltaMath_Improvements.user.js
 // ==/UserScript==
 
 (function () {
