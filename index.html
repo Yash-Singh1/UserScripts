@@ -18,6 +18,7 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <link rel="stylesheet" href="styles.css" />
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"
       integrity="sha512-A7AYk1fGKX6S2SsHywmPkrnzTZHrgiVT7GcQkLGDe2ev0aWb8zejytzS8wjo7PGEXKqJOrjQ4oORtnimIRZBtw=="
@@ -26,90 +27,6 @@
     ></script>
   </head>
   <body>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Baloo+Bhai+2:wght@400;600&display=swap');
-
-      body {
-        background-color: rgb(212, 99, 99);
-        font-family: 'Baloo Bhai 2', cursive;
-      }
-
-      body,
-      html {
-        width: 100%;
-        height: 100%;
-        overflow-x: hidden;
-      }
-
-      .jumbotron {
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: left;
-        width: 100%;
-        height: 100%;
-      }
-
-      h1.display-4 > a {
-        text-decoration: none;
-        color: white;
-        font-weight: 600;
-      }
-
-      .jumbotron > .container-fluid > * {
-        margin-left: 20px;
-      }
-
-      .row {
-        display: flex;
-        flex-flow: row wrap;
-        align-items: stretch;
-        color: black;
-      }
-
-      .card {
-        margin: 10px;
-        padding-bottom: 30px;
-        width: 18rem;
-        height: 325px;
-      }
-
-      .card :not(.card-text) > a {
-        position: absolute;
-        bottom: 10px;
-      }
-
-      #more-container {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-        overflow: hidden;
-        min-height: 100%;
-      }
-
-      .install {
-        margin-left: 30%;
-      }
-
-      ::-webkit-scrollbar {
-        background-color: #202324;
-        color: #aba499;
-      }
-
-      ::-webkit-scrollbar-corner {
-        background-color: #181a1b;
-      }
-
-      ::-webkit-scrollbar-thumb {
-        background-color: #454a4d;
-      }
-
-      ::-webkit-scrollbar-thumb:hover {
-        background-color: #575e62;
-      }
-    </style>
     <div class="jumbotron jumbotron-fluid">
       <div class="container-fluid" data-aos="fade-down">
         <h1 class="display-4">
@@ -128,7 +45,10 @@
             Yash Singh
           </a>
         </p>
-        <button class="btn btn-primary" onclick="scrollMore();location.hash='#more'">
+        <button
+          class="btn btn-primary"
+          onclick="scrollMore();location.hash='#more'"
+        >
           Get Started
         </button>
         <button
@@ -262,7 +182,8 @@
             <h5 class="card-title">DeltaMath Improvements</h5>
             <p class="card-text">
               Various improvements for
-              <a href="https://www.deltamath.com/" target="_blank">DeltaMath</a>.
+              <a href="https://www.deltamath.com/" target="_blank">DeltaMath</a
+              >.
             </p>
             <a
               href="https://github.com/Yash-Singh1/UserScripts/tree/main/DeltaMath_Improvements#readme"
@@ -281,14 +202,6 @@
         </div>
       </div>
     </div>
-    <script>
-      AOS.init();
-      function scrollMore() {
-        document.getElementById('more-container').scrollIntoView({ behavior: 'smooth' });
-      }
-      if (location.hash === '#more') {
-        setTimeout(() => scrollMore(), 250);
-      }
-    </script>
+    <script src="index.js"></script>
   </body>
 </html>
