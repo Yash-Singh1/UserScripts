@@ -75,10 +75,12 @@
       if (
         ![...document.querySelectorAll('div')].find(
           (div) =>
-            div.innerText.trim() ===
+            (div.innerText.trim() ===
               'Now move ALL THREE vertices of the triangle above with your mouse.' &&
-            div.style.display !== 'none'
-        )
+              div.style.display !== 'none') ||
+            div.innerText.trim().startsWith('After moving the vertices, the new value of')
+        ) ||
+        document.documentElement.innerText.includes('You are done!')
       ) {
         initialCursor = true;
       }
