@@ -65,5 +65,32 @@
     ) {
       foundLink.innerHTML = 'Show help video';
     }
+    if (
+      document.documentElement.innerText.includes(
+        'Sum of Triangle Angles Proof (Guided)'
+      )
+    ) {
+      let initialCursor = false;
+
+      if (
+        ![...document.querySelectorAll('div')].find(
+          (div) =>
+            div.innerText.trim() ===
+              'Now move ALL THREE vertices of the triangle above with your mouse.' &&
+            div.style.display !== 'none'
+        )
+      ) {
+        initialCursor = true;
+      }
+      [
+        ...document.querySelectorAll(
+          '#inner > g[dots="false"][cursor="pointer"][stroke][stroke-width] > circle:nth-child(1)'
+        )
+      ].forEach((circle) => {
+        circle.parentElement.style.cursor = initialCursor
+          ? 'initial'
+          : 'pointer';
+      });
+    }
   }).observe(document, { subtree: true, childList: true });
 })();
