@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         DeltaMath Improvements
 // @namespace    https://github.com/Yash-Singh1/UserScripts
-// @version      0.3
+// @version      0.4
 // @description  Various Improvements to the DeltaMath Student Page
 // @author       Yash Singh
 // @match        https://www.deltamath.com/app/student/*
