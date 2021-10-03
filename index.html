@@ -79,7 +79,7 @@
         bottom: 10px;
       }
 
-      #more {
+      #more-container {
         width: 100%;
         display: flex;
         align-items: center;
@@ -128,7 +128,7 @@
             Yash Singh
           </a>
         </p>
-        <button class="btn btn-primary" onclick="scrollMore();">
+        <button class="btn btn-primary" onclick="scrollMore();location.hash='#more'">
           Get Started
         </button>
         <button
@@ -139,7 +139,7 @@
         </button>
       </div>
     </div>
-    <div id="more">
+    <div id="more-container">
       <div class="row justify-content-center">
         <div class="card">
           <div class="card-body">
@@ -284,7 +284,7 @@
     <script>
       AOS.init();
       function scrollMore() {
-        document.getElementById('more').scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('more-container').scrollIntoView({ behavior: 'smooth' });
       }
       if (location.hash === '#more') {
         setTimeout(() => scrollMore(), 250);
