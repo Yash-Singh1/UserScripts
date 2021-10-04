@@ -1,4 +1,9 @@
 {
   "parser": "babel-eslint",
-  "extends": ["plugin:userscripts/recommended"]
+  "overrides": [
+    {
+      "files": "./*_*/*.js",
+      "extends": ["plugin:userscripts/recommended"]
+    }
+  ]
 }
