@@ -78,7 +78,9 @@
             (div.innerText.trim() ===
               'Now move ALL THREE vertices of the triangle above with your mouse.' &&
               div.style.display !== 'none') ||
-            div.innerText.trim().startsWith('After moving the vertices, the new value of')
+            div.innerText
+              .trim()
+              .startsWith('After moving the vertices, the new value of')
         ) ||
         document.documentElement.innerText.includes('You are done!')
       ) {
