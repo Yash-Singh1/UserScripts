@@ -4,10 +4,12 @@
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "eslint": "^7.32.0",
-    "eslint-plugin-userscripts": "^0.0.4"
+    "eslint-plugin-userscripts": "^0.0.4",
+    "inquirer": "^8.2.0"
   },
   "scripts": {
-    "lint": "eslint ./**/*.js"
+    "lint": "eslint ./**/*.js",
+    "create-userscript": "node create-userscript.js"
   },
   "license": "MIT"
 }
