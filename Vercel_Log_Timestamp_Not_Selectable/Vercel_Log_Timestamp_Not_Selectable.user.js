@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Vercel Log Timestamp Not Selectable
 // @namespace    https://github.com/Yash-Singh1/UserScripts
-// @version      0.1
+// @version      0.2
 // @description  Make the timestamps not selectable in Vercel logs
 // @author       Yash Singh
 // @match        https://vercel.com/*/*/*
