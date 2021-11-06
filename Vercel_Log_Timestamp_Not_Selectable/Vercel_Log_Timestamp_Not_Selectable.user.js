@@ -20,7 +20,7 @@
 
   const styles = document.createElement('style');
   styles.innerText = `
-    .realtime-log_timestamp__3Y1_M {
+    tr > [class*="log-table_cell__"]:nth-child(1) {
         user-select: none;
         -moz-user-select: none;
         -khtml-user-select: none;
