@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ZSH Docs CSS
 // @namespace    https://github.com/Yash-Singh1/UserScripts
-// @version      0.1
+// @version      0.2
 // @description  Makes the ZSH Docs look amazing with Kumiko CSS
 // @author       Yash Singh
 // @match        https://zsh.sourceforge.io/*
