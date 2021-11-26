@@ -52,7 +52,10 @@
   a:visited {
     color: #074fff;
   }
+
+  body {
+    padding: 5%;
+  }
 `;
   document.head.appendChild(scrollbarStyles);
-  document.body.style.padding = '5%';
 })();
