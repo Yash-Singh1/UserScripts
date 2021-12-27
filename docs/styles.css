@@ -12,6 +12,17 @@ html {
   overflow-x: hidden;
 }
 
+#more-container a:not(.btn) {
+  text-decoration: none;
+  padding: 0px 1px;
+  transition: 0.1s;
+}
+
+#more-container a:not(.btn):hover {
+  background-color: #7FFFD4B3;
+  transition: 0.2s;
+}
+
 .jumbotron {
   color: white;
   display: flex;
@@ -43,6 +54,7 @@ h1.display-4 > a {
   padding-bottom: 30px;
   width: 18rem;
   height: 325px;
+  background-color: #eee;
 }
 
 .card :not(.card-text) > a {
