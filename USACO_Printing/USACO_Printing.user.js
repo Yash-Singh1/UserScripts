@@ -31,20 +31,32 @@
     const styles = document.createElement('style');
     styles.innerHTML = `
       @media print {
-        body *:not(body > div, .shadow1, .shadow1 > .content, .problem-container, .problem-text, .problem-text *:not(script), body > br) {
+        body
+          *:not(body > div, .shadow1, .shadow1
+            > .content, .problem-container, .problem-text, .problem-text
+            *:not(script), body > br, div.panel-container, div.panel-container
+            *:not(button)) {
           display: none;
         }
+      
+        .panel-container {
+          position: static !important;
+        }
+      
         .problem-container {
           top: 0 !important;
         }
+      
         .problem-text {
           border: none;
         }
+      
         html,
         body {
           margin: 0;
           padding: 0;
         }
+      
         .problem-text {
           margin-top: auto;
         }
@@ -53,6 +65,9 @@
     document
       .querySelector('.problem-text')
       .parentElement.classList.add('problem-container');
+    document
+      .querySelector('.panel')
+      .parentElement.classList.add('panel-container');
     document.querySelector('style').before(styles);
     document.querySelector('.panel').innerHTML =
       document.querySelector('.panel').innerHTML +
