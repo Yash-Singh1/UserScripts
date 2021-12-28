@@ -34,6 +34,11 @@ inquirer
       name: 'match',
       type: 'input',
       message: 'List of matching URL Wildcard Patterns seperated by a comma:'
+    },
+    {
+      name: 'keywords',
+      type: 'input',
+      message: 'List of keywords each seperated by a space'
     }
   ])
   .then((answers) => {
@@ -82,7 +87,7 @@ ${answers.description}
     fs.writeFileSync(
       'docs/index.html',
       insertionPointSplit[0] +
-        `<userscript-card name="${answers.name}">
+        `<userscript-card name="${answers.name}" keywords="${answers.keywords}">
 ${insertionIndent}  ${answers.description}
 ${insertionIndent}</userscript-card>
 ${insertionIndent}${automatedComment}` +

@@ -18,6 +18,10 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Baloo+Bhai+2:wght@500;700&display=swap"
+    />
     <link rel="stylesheet" href="styles.css" />
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"
@@ -63,44 +67,96 @@
     </div>
     <div id="more-container">
       <div class="row justify-content-center">
-        <userscript-card name="AWS Federation Shell Environment Variables">
+        <div id="card-search-container" class="input-group">
+          <input
+            type="search"
+            id="card-search"
+            placeholder="Search..."
+            class="form-control"
+          />
+          <button class="btn btn-primary shadow-none" id="search-btn">
+            🔍
+          </button>
+        </div>
+        <div></div>
+        <div id="none-found" class="card text-dark bg-warning mb-3">
+          <div class="card-header">
+            No results matched your search.
+          </div>
+          <div class="card-body">
+            Try one of the following:
+            <ul>
+              <li>Change the spelling (case insensitive search)</li>
+              <li>Try different keywords</li>
+              <li>Shorten the search</li>
+            </ul>
+          </div>
+        </div>
+        <userscript-card
+          name="AWS Federation Shell Environment Variables"
+          keywords="amazon web services"
+        >
           Adds a button to the AWS Federation UI to copy code to paste into the
           shell.
         </userscript-card>
-        <userscript-card name="Bottom Padding to Swagger UI">
+        <userscript-card
+          name="Bottom Padding to Swagger UI"
+          keywords="api documentation"
+        >
           Adds bottom padding to the Swagger UI to improve scrolling.
         </userscript-card>
-        <userscript-card name="Disable Comment on Empty Field">
+        <userscript-card
+          name="Disable Comment on Empty Field"
+          keywords="github.com"
+        >
           Fixes a bug that occurs sometimes in Gists that makes the "Comment"
           field available even when the input is empty.
         </userscript-card>
-        <userscript-card name="StudentVue Mark All Read">
+        <userscript-card
+          name="StudentVue Mark All Read"
+          keywords="parentvue synergy inbox"
+        >
           Adds a mark all as read button to the StudentVue messages tab.
         </userscript-card>
-        <userscript-card name="No Overflow X on GitHub Keyboard Shortcuts">
+        <userscript-card
+          name="No Overflow X on GitHub Keyboard Shortcuts"
+          keywords="github.com"
+        >
           Removes that horizontal scrollbar on the GitHub Keyboard Shortcuts.
         </userscript-card>
-        <userscript-card name="DeltaMath Improvements">
+        <userscript-card name="DeltaMath Improvements" keywords="geometry">
           Various improvements for
           <a href="https://www.deltamath.com/" target="_blank">DeltaMath</a>.
         </userscript-card>
-        <userscript-card name="Github Packages Clipboard Fix">
+        <userscript-card
+          name="Github Packages Clipboard Fix"
+          keywords="github.com"
+        >
           Fixes a clipboard problem in Github Packages
         </userscript-card>
-        <userscript-card name="Vercel Log Timestamp Not Selectable">
+        <userscript-card
+          name="Vercel Log Timestamp Not Selectable"
+          keywords="vercel.com logistics"
+        >
           Make the timestamps not selectable in Vercel logs, making it easier to
           copy-paste somewhere else.
         </userscript-card>
-        <userscript-card name="Yohoho.io Block Video Ads">
+        <userscript-card name="Yohoho.io Block Video Ads" keywords="ad-blocker">
           Blocks all video ads from Yohoho.io
         </userscript-card>
-        <userscript-card name="ZSH Docs CSS">
+        <userscript-card
+          name="ZSH Docs CSS"
+          keywords="documentation shell readable"
+        >
           Makes the ZSH Docs look amazing with Kumiko CSS
         </userscript-card>
-        <userscript-card name="USACO Printing">
+        <userscript-card name="USACO Printing" keywords="usaco.org">
           Makes printing out USACO problems a lot easier
         </userscript-card>
-        <userscript-card name="Udemy XML Encoding Fix">
+        <userscript-card
+          name="Udemy XML Encoding Fix"
+          keywords="udemy.com exercises ace editor"
+        >
           Fix Udemy's XML Encoding Problem
         </userscript-card>
         <!-- DO NOT TOUCH: AUTOMATED INSERTION POINT FOR NEXT USERSCRIPT CARD -->

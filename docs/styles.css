@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Baloo+Bhai+2:wght@400;600&display=swap');
-
 body {
   background-color: rgb(212, 99, 99);
   font-family: 'Baloo Bhai 2', cursive;
@@ -19,7 +17,7 @@ html {
 }
 
 #more-container a:not(.btn):hover {
-  background-color: #7FFFD4B3;
+  background-color: #7fffd4b3;
   transition: 0.2s;
 }
 
@@ -49,7 +47,7 @@ h1.display-4 > a {
   color: black;
 }
 
-.card {
+.card:not(#none-found) {
   margin: 10px;
   padding-bottom: 30px;
   width: 18rem;
@@ -57,9 +55,20 @@ h1.display-4 > a {
   background-color: #eee;
 }
 
-.card :not(.card-text) > a {
+#none-found {
+  width: max-content;
+  padding: 0;
+}
+
+.card:not(#none-found) :not(.card-text) > a {
   position: absolute;
   bottom: 10px;
+}
+
+#card-search-container {
+  position: relative;
+  margin-bottom: 50px;
+  width: max-content;
 }
 
 #more-container {
