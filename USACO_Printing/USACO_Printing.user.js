@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         USACO Printing
 // @namespace    https://github.com/Yash-Singh1/UserScripts
-// @version      0.1
+// @version      0.2
 // @description  Makes printing out USACO problems a lot easier
 // @author       Yash Singh
 // @match        http://www.usaco.org/*
