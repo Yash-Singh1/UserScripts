@@ -5,7 +5,7 @@
 // @description  Blocks all video ads from Yohoho.io
 // @author       Yash Singh
 // @match        https://yohoho.io/
-// @icon         https://yohoho.io/favicon/favicon-32x32.png
+// @icon         https://www.google.com/s2/favicons?domain=yohoho.io
 // @grant        none
 // @homepage     https://github.com/Yash-Singh1/UserScripts/tree/main/Yohoho.io_Block_Video_Ads#readme
 // @homepageURL  https://github.com/Yash-Singh1/UserScripts/tree/main/Yohoho.io_Block_Video_Ads#readme
