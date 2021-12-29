@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Yohoho.io Block Video Ads
 // @namespace    https://github.com/Yash-Singh1/UserScripts
-// @version      0.1
+// @version      0.2
 // @description  Blocks all video ads from Yohoho.io
 // @author       Yash Singh
 // @match        https://yohoho.io/
