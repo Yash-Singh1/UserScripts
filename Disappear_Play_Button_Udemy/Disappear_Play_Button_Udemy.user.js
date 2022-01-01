@@ -22,11 +22,11 @@
     if (document.querySelector(".vjs-user-inactive")) {
       document.querySelector(
         '[class*="video-player--center--"]'
-      ).style.display = "none";
+      ).style.visibility = "hidden";
     } else {
       document.querySelector(
         '[class*="video-player--center--"]'
-      ).style.display = "";
+      ).style.visibility = "visible";
     }
   });
   do {
