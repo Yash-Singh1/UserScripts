@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Disappear Play Button Udemy
 // @namespace    https://github.com/Yash-Singh1/UserScripts
-// @version      0.1
+// @version      0.2
 // @description  Makes the play button disappear when the video is inactive to let you view the content (like other streaming platforms)
 // @author       Yash Singh
 // @match        https://*.udemy.com/course/*/learn/lecture/*
