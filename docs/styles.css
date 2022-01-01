@@ -10,6 +10,17 @@ html {
   overflow-x: hidden;
 }
 
+a {
+  color: #518bd5;
+  text-decoration: none;
+  transition: 0.5s;
+}
+
+a:hover {
+  color: #5865F2;
+  transition: 0.5s;
+}
+
 #more-container a:not(.btn) {
   text-decoration: none;
   padding: 0px 1px;
