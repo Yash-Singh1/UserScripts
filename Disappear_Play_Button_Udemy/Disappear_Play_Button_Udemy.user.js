@@ -16,17 +16,17 @@
 // ==/UserScript==
 
 (async function () {
-  "use strict";
+  'use strict';
 
   const observer = new MutationObserver(() => {
-    if (document.querySelector(".vjs-user-inactive")) {
+    if (document.querySelector('.vjs-user-inactive')) {
       document.querySelector(
         '[class*="video-player--center--"]'
-      ).style.visibility = "hidden";
+      ).style.visibility = 'hidden';
     } else {
       document.querySelector(
         '[class*="video-player--center--"]'
-      ).style.visibility = "visible";
+      ).style.visibility = 'visible';
     }
   });
   do {
@@ -34,7 +34,7 @@
       observer.observe(
         document.querySelector('[class*="video-player--video-player"]'),
         {
-          attributes: true,
+          attributes: true
         }
       );
       break;
