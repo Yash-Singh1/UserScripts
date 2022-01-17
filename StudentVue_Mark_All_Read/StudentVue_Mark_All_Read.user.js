@@ -16,6 +16,8 @@
 // @updateURL    https://raw.githubusercontent.com/Yash-Singh1/UserScripts/main/StudentVue_Mark_All_Read/StudentVue_Mark_All_Read.user.js
 // ==/UserScript==
 
+/* global $ */
+
 (function () {
   'use strict';
 
