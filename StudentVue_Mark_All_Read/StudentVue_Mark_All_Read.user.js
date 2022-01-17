@@ -29,30 +29,6 @@
     location.search = location.search + '&PAGE=0';
   }
 
-  (function () {
-    var oldOpen = XMLHttpRequest.prototype.open;
-    window.openHTTPs = 0;
-    XMLHttpRequest.prototype.open = function (
-      method,
-      url,
-      async = true,
-      user = null,
-      pass = null
-    ) {
-      window.openHTTPs++;
-      this.addEventListener(
-        'readystatechange',
-        function () {
-          if (this.readyState == 4) {
-            window.openHTTPs--;
-          }
-        },
-        false
-      );
-      oldOpen.call(this, method, url, async, user, pass);
-    };
-  })();
-
   async function markAllRead() {
     document.querySelectorAll('.UnreadMessage').forEach((el) => el.click());
     const closeBtn = document.querySelector(
@@ -70,24 +46,18 @@
         el.innerHTML.toLowerCase().includes('next')
     );
 
-    while (window.openHTTPs > 0) {
-      await new Promise((resolve) =>
-        setTimeout(() => {
-          resolve(true);
-        }, 1000)
-      );
-    }
-
-    if (nextPageBtn) {
-      location.href =
-        nextPageBtn.href +
-        '&READ=true&READ_PAGE=' +
-        (searchParams.get('READ_PAGE') || searchParams.get('PAGE'));
-    } else if (searchParams.get('READ') === 'true') {
-      location.search = location.search
-        .replace(/(PAGE=)\d+/, '$1' + searchParams.get('READ_PAGE'))
-        .replace(/&READ=true&READ_PAGE=\d+/, '');
-    }
+    $(document).ajaxStop(function () {
+      if (nextPageBtn) {
+        location.href =
+          nextPageBtn.href +
+          '&READ=true&READ_PAGE=' +
+          (searchParams.get('READ_PAGE') || searchParams.get('PAGE'));
+      } else if (searchParams.get('READ') === 'true') {
+        location.search = location.search
+          .replace(/(PAGE=)\d+/, '$1' + searchParams.get('READ_PAGE'))
+          .replace(/&READ=true&READ_PAGE=\d+/, '');
+      }
+    });
   }
 
   if (searchParams.get('READ') === 'true') {
