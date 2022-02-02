@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         CodeChef Day
 // @namespace    https://github.com/Yash-Singh1/UserScripts
-// @version      0.2
+// @version      0.3
 // @description  Tells the day for CodeChef contests on the contests page
 // @author       Yash Singh
 // @match        https://www.codechef.com/contests
