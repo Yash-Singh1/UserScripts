@@ -5,6 +5,7 @@
 // @description  Tells the day for CodeChef contests on the contests page
 // @author       Yash Singh
 // @match        https://www.codechef.com/contests
+// @match        https://www.codechef.com/contests?*
 // @icon         https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://codechef.com&size=16
 // @grant        none
 // @homepage     https://github.com/Yash-Singh1/UserScripts/tree/main/CodeChef_Day#readme
