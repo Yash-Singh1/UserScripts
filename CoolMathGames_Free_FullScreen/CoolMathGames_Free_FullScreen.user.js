@@ -15,21 +15,21 @@
 // @updateURL    https://raw.githubusercontent.com/Yash-Singh1/UserScripts/main/CoolMathGames_Free_FullScreen/CoolMathGames_Free_FullScreen.user.js
 // ==/UserScript==
 
-(function() {
-    'use strict';
+(function () {
+  'use strict';
 
-    if (document.querySelector('.game-field-wrapper')) {
-        alert('here')
-        const interval = setInterval(() => {
-            if (document.querySelector('span.big-screen-popover-span')) {
-                const btn = document.createElement('button');
-                btn.innerText = 'Fullscreen';
-                btn.onclick = () => {
-                    location.pathname += '/play';
-                };
-                document.querySelector('.immerse-button').before(btn);
-                clearInterval(interval);
-            }
-        }, 500);
-    }
+  if (document.querySelector('.game-field-wrapper')) {
+    alert('here');
+    const interval = setInterval(() => {
+      if (document.querySelector('span.big-screen-popover-span')) {
+        const btn = document.createElement('button');
+        btn.innerText = 'Fullscreen';
+        btn.onclick = () => {
+          location.pathname += '/play';
+        };
+        document.querySelector('.immerse-button').before(btn);
+        clearInterval(interval);
+      }
+    }, 500);
+  }
 })();

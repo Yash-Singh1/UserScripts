@@ -43,10 +43,7 @@
     }
 
     checkAndDisable();
-    document.querySelector(
-      '#new_comment_field'
-    ).onchange = document.querySelector(
-      '#new_comment_field'
-    ).onkeydown = checkAndDisable;
+    document.querySelector('#new_comment_field').onchange =
+      document.querySelector('#new_comment_field').onkeydown = checkAndDisable;
   }
 })();

@@ -17,14 +17,14 @@
 
 /* global PokiSDK */
 
-(function() {
-    'use strict';
+(function () {
+  'use strict';
 
-    window.addEventListener('load', () => {
-        const interval = setInterval(() => {
-            if (window.PokiSDK) {
-                PokiSDK.rewardedBreak = () => new Promise(r => r(true));
-            }
-        }, 1000);
-    });
+  window.addEventListener('load', () => {
+    const interval = setInterval(() => {
+      if (window.PokiSDK) {
+        PokiSDK.rewardedBreak = () => new Promise((r) => r(true));
+      }
+    }, 1000);
+  });
 })();

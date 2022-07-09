@@ -16,9 +16,9 @@
 // ==/UserScript==
 
 (function () {
-  "use strict";
+  'use strict';
 
-  if (document.querySelector(".codebox")) {
+  if (document.querySelector('.codebox')) {
     const _LINE_NUM_INTERVAL = setInterval(() => {
       const links = document.querySelectorAll('.codebox a[title*="Line"]');
       if (links.length > 0) {

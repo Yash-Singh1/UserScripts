@@ -57,8 +57,12 @@ inquirer
 ${answers.match
   .split(',')
   .map((matchInput) => '// @match        ' + matchInput.trim())
-  .join('\n')}${answers.icon ? `
-// @icon         ${answers.icon}` : ''}
+  .join('\n')}${
+        answers.icon
+          ? `
+// @icon         ${answers.icon}`
+          : ''
+      }
 // @grant        none
 // @homepage     https://github.com/Yash-Singh1/UserScripts/tree/main/${shortName}#readme
 // @homepageURL  https://github.com/Yash-Singh1/UserScripts/tree/main/${shortName}#readme
@@ -80,9 +84,10 @@ ${answers.description}
     const insertionPointSplit = fs
       .readFileSync('docs/index.html', 'utf-8')
       .split(automatedComment);
-    const insertionIndent = insertionPointSplit[0].split('\n')[
-      insertionPointSplit[0].split('\n').length - 1
-    ];
+    const insertionIndent =
+      insertionPointSplit[0].split('\n')[
+        insertionPointSplit[0].split('\n').length - 1
+      ];
 
     fs.writeFileSync(
       'docs/index.html',

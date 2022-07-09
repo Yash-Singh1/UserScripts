@@ -15,12 +15,12 @@
 // @updateURL    https://raw.githubusercontent.com/Yash-Singh1/UserScripts/main/Disable_Font_Ligatures/Disable_Font_Ligatures.user.js
 // ==/UserScript==
 
-(function() {
-    'use strict';
+(function () {
+  'use strict';
 
-    let style = document.createElement("style");
-    style.innerText = `* {
+  let style = document.createElement('style');
+  style.innerText = `* {
       font-variant-ligatures: none;
     }`;
-    window.onload = () => document.head.appendChild(style);
+  window.onload = () => document.head.appendChild(style);
 })();

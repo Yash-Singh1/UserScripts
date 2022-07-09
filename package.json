@@ -5,10 +5,12 @@
     "@babel/eslint-parser": "^7.18.2",
     "eslint": "^8.19.0",
     "eslint-plugin-userscripts": "^0.2.8",
-    "inquirer": "^8.2.0"
+    "inquirer": "^8.2.0",
+    "prettier": "^2.7.1"
   },
   "scripts": {
-    "lint": "eslint ./**/*.js",
+    "lint": "eslint ./**/*.js && prettier --check .",
+    "lint:fix": "eslint ./**/*.js --fix && prettier --write .",
     "create-userscript": "node create-userscript.js"
   },
   "license": "MIT"
