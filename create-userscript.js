@@ -57,8 +57,8 @@ inquirer
 ${answers.match
   .split(',')
   .map((matchInput) => '// @match        ' + matchInput.trim())
-  .join('\n')}
-// @icon         ${answers.icon}
+  .join('\n')}${answers.icon ? `
+// @icon         ${answers.icon}` : ''}
 // @grant        none
 // @homepage     https://github.com/Yash-Singh1/UserScripts/tree/main/${shortName}#readme
 // @homepageURL  https://github.com/Yash-Singh1/UserScripts/tree/main/${shortName}#readme
