@@ -2,9 +2,9 @@
   "name": "userscripts",
   "author": "Yash Singh",
   "devDependencies": {
-    "babel-eslint": "^10.1.0",
-    "eslint": "^7.32.0",
-    "eslint-plugin-userscripts": "^0.0.4",
+    "@babel/eslint-parser": "^7.18.2",
+    "eslint": "^8.19.0",
+    "eslint-plugin-userscripts": "^0.2.8",
     "inquirer": "^8.2.0"
   },
   "scripts": {
