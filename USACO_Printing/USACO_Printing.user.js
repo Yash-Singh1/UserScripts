@@ -6,6 +6,8 @@
 // @author       Yash Singh
 // @match        http://www.usaco.org/*
 // @match        https://www.usaco.org/*
+// @match        http://usaco.org/*
+// @match        https://usaco.org/*
 // @match        http://train.usaco.org/*
 // @match        https://train.usaco.org/*
 // @icon         http://www.usaco.org/current/images/usaco_logo.png
