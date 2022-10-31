@@ -15,29 +15,32 @@
 // @updateURL    https://raw.githubusercontent.com/Yash-Singh1/UserScripts/main/USACO_Set_Default_Language/USACO_Set_Default_Language.user.js
 // ==/UserScript==
 
-(function() {
-    'use strict';
+(function () {
+  'use strict';
 
-    function changeDefault() {
-        let selectEl = document.querySelector('select[name="language"]');
-        let val = GM_getValue('lang', 'C++17');
-        let lookFor = '';
-        for (const optionEl of selectEl.children) {
-            if (optionEl.innerText === val) {
-                lookFor = optionEl.value;
-            }
-        }
-        if (lookFor === '') {
-            alert('Set language is not found')
-        } else {
-            selectEl.value = lookFor;
-        }
+  function changeDefault() {
+    let selectEl = document.querySelector('select[name="language"]');
+    let val = GM_getValue('lang', 'C++17');
+    let lookFor = '';
+    for (const optionEl of selectEl.children) {
+      if (optionEl.innerText === val) {
+        lookFor = optionEl.value;
+      }
     }
+    if (lookFor === '') {
+      alert('Set language is not found');
+    } else {
+      selectEl.value = lookFor;
+    }
+  }
 
+  changeDefault();
+
+  GM_registerMenuCommand('Set the default language', () => {
+    GM_setValue(
+      'lang',
+      prompt('What default language would you like to set to?', 'C++17')
+    );
     changeDefault();
-
-    GM_registerMenuCommand("Set the default language", () => {
-        GM_setValue('lang', prompt("What default language would you like to set to?", "C++17"));
-        changeDefault();
-    });
+  });
 })();
