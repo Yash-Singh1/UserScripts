@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         USACO Set Default Language
 // @namespace    https://github.com/Yash-Singh1/UserScripts
-// @version      0.2
+// @version      0.3
 // @description  Set the default language in the dropdown for USACO
 // @author       Yash Singh
 // @match        http://www.usaco.org/index.php?page=viewproblem2&cpid=*
+// @match        http://usaco.org/index.php?page=viewproblem2&cpid=*
 // @icon         http://www.usaco.org/current/images/usaco_logo.png
 // @grant        GM_getValue
 // @grant        GM_setValue
