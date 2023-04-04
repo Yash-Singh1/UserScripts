@@ -16,11 +16,11 @@
 // @updateURL    https://raw.githubusercontent.com/Yash-Singh1/UserScripts/main/CSES_Printing/CSES_Printing.user.js
 // ==/UserScript==
 
-(function() {
-    'use strict';
+(function () {
+  'use strict';
 
-    const style = document.createElement('style');
-    style.innerHTML = `
+  const style = document.createElement('style');
+  style.innerHTML = `
       @media print {
         div.nav.sidebar {
           display: none;
@@ -43,5 +43,5 @@
         }
       }
     `;
-    document.head.appendChild(style);
+  document.head.appendChild(style);
 })();
