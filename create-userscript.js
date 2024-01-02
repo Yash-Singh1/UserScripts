@@ -1,5 +1,5 @@
 const inquirer = require('inquirer');
-const fs = require('fs');
+const fs = require('node:fs');
 
 const automatedComment =
   '<!-- DO NOT TOUCH: AUTOMATED INSERTION POINT FOR NEXT USERSCRIPT CARD -->';
