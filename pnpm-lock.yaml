@@ -7,13 +7,13 @@ settings:
 devDependencies:
   '@babel/eslint-parser':
     specifier: ^7.18.2
-    version: 7.18.2(@babel/core@7.21.4)(eslint@8.56.0)
+    version: 7.18.2(@babel/core@7.21.4)(eslint@9.0.0-alpha.0)
   eslint:
-    specifier: ^8.19.0
-    version: 8.56.0
+    specifier: 9.0.0-alpha.0
+    version: 9.0.0-alpha.0
   eslint-plugin-userscripts:
-    specifier: ^0.4.0
-    version: 0.4.0(eslint@8.56.0)
+    specifier: ^0.5.0
+    version: 0.5.0(eslint@9.0.0-alpha.0)
   inquirer:
     specifier: ^8.2.0
     version: 8.2.0
@@ -85,7 +85,7 @@ packages:
       - supports-color
     dev: true
 
-  /@babel/eslint-parser@7.18.2(@babel/core@7.21.4)(eslint@8.56.0):
+  /@babel/eslint-parser@7.18.2(@babel/core@7.21.4)(eslint@9.0.0-alpha.0):
     resolution:
       {
         integrity: sha512-oFQYkE8SuH14+uR51JVAmdqwKYXGRjEXx7s+WiagVjqQ+HPE+nnwyF2qlVG8evUsUHmPcA+6YXMEDbIhEyQc5A==
@@ -96,7 +96,7 @@ packages:
       eslint: ^7.5.0 || ^8.0.0
     dependencies:
       '@babel/core': 7.21.4
-      eslint: 8.56.0
+      eslint: 9.0.0-alpha.0
       eslint-scope: 5.1.1
       eslint-visitor-keys: 2.1.0
       semver: 6.3.0
@@ -316,7 +316,7 @@ packages:
       to-fast-properties: 2.0.0
     dev: true
 
-  /@eslint-community/eslint-utils@4.4.0(eslint@8.56.0):
+  /@eslint-community/eslint-utils@4.4.0(eslint@9.0.0-alpha.0):
     resolution:
       {
         integrity: sha512-1/sA4dwrzBAyeUoQ6oxahHKmrZvsnLCg4RfxW3ZFGGmQkSNQPFNLV9CUEFQP1x9EYXHTo5p6xdhZM1Ne9p/AfA==
@@ -325,7 +325,7 @@ packages:
     peerDependencies:
       eslint: ^6.0.0 || ^7.0.0 || >=8.0.0
     dependencies:
-      eslint: 8.56.0
+      eslint: 9.0.0-alpha.0
       eslint-visitor-keys: 3.4.3
     dev: true
 
@@ -337,12 +337,12 @@ packages:
     engines: { node: ^12.0.0 || ^14.0.0 || >=16.0.0 }
     dev: true
 
-  /@eslint/eslintrc@2.1.4:
+  /@eslint/eslintrc@3.0.0:
     resolution:
       {
-        integrity: sha512-269Z39MS6wVJtsoUl10L60WdkhJVdPG24Q4eZTH3nnF6lpvSShEK3wQjDX9JRWAUPvPh7COouPpU9IrqaZFvtQ==
+        integrity: sha512-R8p3jN1kdWvFRiRfgpUxZ4PMgfJJFt6NuLGDnnqLb7RKmsd5Xa0KqRMjmaqRO7e38ZbG/9zKPgDjeJeqsDofSA==
       }
-    engines: { node: ^12.22.0 || ^14.17.0 || >=16.0.0 }
+    engines: { node: ^18.18.0 || ^20.9.0 || >=21.1.0 }
     dependencies:
       ajv: 6.12.6
       debug: 4.3.4
@@ -357,12 +357,12 @@ packages:
       - supports-color
     dev: true
 
-  /@eslint/js@8.56.0:
+  /@eslint/js@9.0.0-alpha.0:
     resolution:
       {
-        integrity: sha512-gMsVel9D7f2HLkBma9VbtzZRehRogVRfbr++f06nL2vnCGCNlzOD+/MUov/F4p8myyAHspEhVobgjpX64q5m6A==
+        integrity: sha512-SsmCfB6P+1D7RbUjWxi206LMt3jmiVXolUHIgR2ZeJGKyXdNtXY6t3yl8mkfO1XuCJM9iGHMKzQm9H52UyuSpQ==
       }
-    engines: { node: ^12.22.0 || ^14.17.0 || >=16.0.0 }
+    engines: { node: ^18.18.0 || ^20.9.0 || >=21.1.0 }
     dev: true
 
   /@humanwhocodes/config-array@0.11.13:
@@ -478,13 +478,6 @@ packages:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.16.0
-    dev: true
-
-  /@ungap/structured-clone@1.2.0:
-    resolution:
-      {
-        integrity: sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
-      }
     dev: true
 
   /acorn-jsx@5.3.2(acorn@8.11.3):
@@ -792,16 +785,6 @@ packages:
       clone: 1.0.4
     dev: true
 
-  /doctrine@3.0.0:
-    resolution:
-      {
-        integrity: sha512-yS+Q5i3hBf7GBkd4KG8a7eBNNWNGLTaEwwYWUijIYM7zrlYDM0BFXHjjPWlWZ1Rg7UaddZeIDmi9jF3HmqiQ2w==
-      }
-    engines: { node: '>=6.0.0' }
-    dependencies:
-      esutils: 2.0.3
-    dev: true
-
   /electron-to-chromium@1.4.349:
     resolution:
       {
@@ -840,17 +823,16 @@ packages:
     engines: { node: '>=10' }
     dev: true
 
-  /eslint-plugin-userscripts@0.4.0(eslint@8.56.0):
+  /eslint-plugin-userscripts@0.5.0(eslint@9.0.0-alpha.0):
     resolution:
       {
-        integrity: sha512-SqYXsAo4Lb4jLYjMYh4ws/SX4kWXO6Iq4l2eQUqqxitmbnkYXr18SPIGY8/MjV2G3X3ckGVLgZAL5ynlsqNo7g==
+        integrity: sha512-QIyIqbv/nMPqbe7FHnBZyBaNoZwGjVvan7tumeTdvKk7dVldlUMvrtcPLZwLZDePQPQpgGJ2co+tJ3AlfUxvoQ==
       }
-    engines: { node: '>=16.0.0 <21.0.0' }
+    engines: { node: '>=18.0.0 <22.0.0' }
     peerDependencies:
-      eslint: '>=8.0.0 <9'
+      eslint: '>=8.40.0 <10'
     dependencies:
-      eslint: 8.56.0
-      requireindex: 1.2.0
+      eslint: 9.0.0-alpha.0
       semver: 7.3.8
     dev: true
 
@@ -892,27 +874,25 @@ packages:
     engines: { node: ^12.22.0 || ^14.17.0 || >=16.0.0 }
     dev: true
 
-  /eslint@8.56.0:
+  /eslint@9.0.0-alpha.0:
     resolution:
       {
-        integrity: sha512-Go19xM6T9puCOWntie1/P997aXxFsOi37JIHRWI514Hc6ZnaHGKY9xFhrU65RT6CcBEzZoGG1e6Nq+DT04ZtZQ==
+        integrity: sha512-21yCNcPYvXtvn3RrqPQP5+2X3LAqkfuPWSkxdkQyftorCYwUgu0rTNXxWAy8sSeBBDoVpHfeg2UTI15H26wkXQ==
       }
-    engines: { node: ^12.22.0 || ^14.17.0 || >=16.0.0 }
+    engines: { node: ^18.18.0 || ^20.9.0 || >=21.1.0 }
     hasBin: true
     dependencies:
-      '@eslint-community/eslint-utils': 4.4.0(eslint@8.56.0)
+      '@eslint-community/eslint-utils': 4.4.0(eslint@9.0.0-alpha.0)
       '@eslint-community/regexpp': 4.10.0
-      '@eslint/eslintrc': 2.1.4
-      '@eslint/js': 8.56.0
+      '@eslint/eslintrc': 3.0.0
+      '@eslint/js': 9.0.0-alpha.0
       '@humanwhocodes/config-array': 0.11.13
       '@humanwhocodes/module-importer': 1.0.1
       '@nodelib/fs.walk': 1.2.8
-      '@ungap/structured-clone': 1.2.0
       ajv: 6.12.6
       chalk: 4.1.2
       cross-spawn: 7.0.3
       debug: 4.3.4
-      doctrine: 3.0.0
       escape-string-regexp: 4.0.0
       eslint-scope: 7.2.2
       eslint-visitor-keys: 3.4.3
@@ -929,7 +909,6 @@ packages:
       imurmurhash: 0.1.4
       is-glob: 4.0.3
       is-path-inside: 3.0.3
-      js-yaml: 4.1.0
       json-stable-stringify-without-jsonify: 1.0.1
       levn: 0.4.1
       lodash.merge: 4.6.2
@@ -1632,14 +1611,6 @@ packages:
       inherits: 2.0.4
       string_decoder: 1.3.0
       util-deprecate: 1.0.2
-    dev: true
-
-  /requireindex@1.2.0:
-    resolution:
-      {
-        integrity: sha512-L9jEkOi3ASd9PYit2cwRfyppc9NoABujTP8/5gFcbERmo5jUoAKovIC3fsF17pkTnGsrByysqX+Kxd2OTNI1ww==
-      }
-    engines: { node: '>=0.10.5' }
     dev: true
 
   /resolve-from@4.0.0:
