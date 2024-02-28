@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         No Overflow X on GitHub Keyboard Shortcuts
 // @namespace    https://github.com/Yash-Singh1/UserScripts
-// @version      0.1
+// @version      0.2
 // @description  Removes the overflow-x on the GitHub Keyboard Shortcuts page
 // @author       Yash Singh
 // @match        https://github.com/*
@@ -18,17 +18,28 @@
 (function () {
   'use strict';
 
-  setInterval(() => {
-    const keyboardShortcutBox = document.querySelector(
-      'body > details > details-dialog > div > div.Box-body.p-0.overflow-scroll'
-    );
-
-    if (keyboardShortcutBox) {
-      keyboardShortcutBox.style.setProperty(
-        'overflow-x',
-        'hidden',
-        'important'
+  const observer = new MutationObserver(() => {
+    const keyboardShortcutStyle = () => {
+      const keyboardShortcutBox = document.querySelector(
+        'body > details > details-dialog > div > div.Box-body.overflow-scroll'
       );
-    }
-  }, 1000);
+
+      if (keyboardShortcutBox) {
+        insideObserver.disconnect();
+        keyboardShortcutBox.style.setProperty(
+          'overflow-x',
+          'hidden',
+          'important'
+        );
+      }
+    };
+
+    const insideObserver = new MutationObserver(keyboardShortcutStyle);
+
+    insideObserver.observe(document.body.querySelector('body > details'), { subtree: true, childList: true });
+
+    keyboardShortcutStyle();
+  });
+
+  observer.observe(document.body, { childList: true });
 })();
