@@ -1,5 +1,5 @@
-const inquirer = require('inquirer');
-const fs = require('node:fs');
+import inquirer from 'inquirer';
+import * as fs from 'node:fs';
 
 const automatedComment =
   '<!-- DO NOT TOUCH: AUTOMATED INSERTION POINT FOR NEXT USERSCRIPT CARD -->';
@@ -38,7 +38,7 @@ inquirer
     {
       name: 'keywords',
       type: 'input',
-      message: 'List of keywords each seperated by a space'
+      message: 'List of keywords each seperated by a space:'
     }
   ])
   .then((answers) => {
