@@ -36,7 +36,10 @@
 
     const insideObserver = new MutationObserver(keyboardShortcutStyle);
 
-    insideObserver.observe(document.body.querySelector('body > details'), { subtree: true, childList: true });
+    insideObserver.observe(document.body.querySelector('body > details'), {
+      subtree: true,
+      childList: true
+    });
 
     keyboardShortcutStyle();
   });

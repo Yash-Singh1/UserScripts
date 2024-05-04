@@ -13,6 +13,6 @@ Replace `data` constant with the data you want to answer following the format `[
 const data = [
   ['What is the capital of India?', 'New Delhi'],
   ['What is the capital of France?', 'Paris'],
-  ['What is the capital of the United States?', 'Washington, D.C.'],
+  ['What is the capital of the United States?', 'Washington, D.C.']
 ];
 ```
