@@ -1,19 +1,21 @@
 // ==UserScript==
 // @name         T3Chat++
 // @namespace    https://github.com/Yash-Singh1/UserScripts
-// @version      0.1
+// @version      0.2
 // @description  Adds BYOK, local models, and TPS counter to t3.chat
 // @author       Yash Singh
 // @match        https://t3.chat/*?*
 // @match        https://t3.chat/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=t3.chat
-// @grant        none
 // @homepage     https://github.com/Yash-Singh1/UserScripts/tree/main/T3Chat++#readme
 // @homepageURL  https://github.com/Yash-Singh1/UserScripts/tree/main/T3Chat++#readme
 // @supportURL   https://github.com/Yash-Singh1/UserScripts/issues
 // @license      MIT
 // @downloadURL  https://raw.githubusercontent.com/Yash-Singh1/UserScripts/main/T3Chat++/T3Chat++.user.js
 // @updateURL    https://raw.githubusercontent.com/Yash-Singh1/UserScripts/main/T3Chat++/T3Chat++.user.js
+// @grant        unsafeWindow
+// @sandbox      raw
+// @run-at       document-start
 // ==/UserScript==
 
 (function () {
