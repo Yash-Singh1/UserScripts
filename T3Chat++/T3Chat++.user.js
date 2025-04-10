@@ -1,23 +1,3 @@
-// ==UserScript==
-// @name         T3Chat++
-// @namespace    https://github.com/Yash-Singh1/UserScripts
-// @version      0.2
-// @description  Adds BYOK, local models, and TPS counter to t3.chat
-// @author       Yash Singh
-// @match        https://t3.chat/*?*
-// @match        https://t3.chat/*
-// @icon         https://www.google.com/s2/favicons?sz=64&domain=t3.chat
-// @homepage     https://github.com/Yash-Singh1/UserScripts/tree/main/T3Chat++#readme
-// @homepageURL  https://github.com/Yash-Singh1/UserScripts/tree/main/T3Chat++#readme
-// @supportURL   https://github.com/Yash-Singh1/UserScripts/issues
-// @license      MIT
-// @downloadURL  https://raw.githubusercontent.com/Yash-Singh1/UserScripts/main/T3Chat++/T3Chat++.user.js
-// @updateURL    https://raw.githubusercontent.com/Yash-Singh1/UserScripts/main/T3Chat++/T3Chat++.user.js
-// @grant        unsafeWindow
-// @sandbox      raw
-// @run-at       document-start
-// ==/UserScript==
-
 (function () {
   "use strict";
 
@@ -382,6 +362,7 @@
     }, 50);
   }
 
+  let patchedReactJSX = false;
   function patchModuleFactories(modules) {
     for (const [chunkId, factory] of Object.entries(modules)) {
       if (typeof factory !== "function") continue;
@@ -467,8 +448,37 @@
           Object.freeze(module.exports);
           return returnValue;
         };
-        break;
+      } else if (chunkId === "28495") {
+        if (patchedReactJSX) continue;
+        patchedReactJSX = true;
+        if (modules[chunkId]._wrapped) continue;
+        console.log("patching", chunkId, modules[chunkId], modules[chunkId]._wrapped);
+        modules[chunkId] = function patchedFactory(module, exports, require) {
+          const returnValue = factory.call(this, module, exports, require);
+
+          const originalModuleExports = module.exports;
+          module.exports = {};
+          for (const key of Object.keys(originalModuleExports)) {
+            if (key === "jsx") {
+              const exported = originalModuleExports[key];
+              module.exports[key] = function wrapped(component, props) {
+                if (Object.keys(props).length === 2 && props.model && props.threadId) {
+                  return [
+                    exported.call(this, component, props),
+                    exported.call(this, component, { ...props, threadId: location.hash.slice(1) }),
+                  ];
+                } else {
+                  return exported.call(this, component, props);
+                }
+              };
+            } else {
+              module.exports[key] = originalModuleExports[key];
+            }
+          }
+          return returnValue;
+        };
       }
+      modules[chunkId]._wrapped = true;
     }
   }
 
