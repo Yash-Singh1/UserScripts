@@ -101,7 +101,7 @@
     // TODO: actually fetch title somehow
     onDataPart?.([{ content: { title: "Local LLM placeholder" } }]);
 
-    const response = await fetch(new URL("/chat/completions", fixBaseURL(apiBaseURL)), {
+    const response = await fetch(new URL("chat/completions", fixBaseURL(apiBaseURL)), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -649,7 +649,7 @@
           if (id && apiBaseURL) {
             let title = id;
             try {
-              const modelList = await fetch(new URL("/models", fixBaseURL(apiBaseURL)), { mode: "no-cors" }); 
+              const modelList = await fetch(new URL("models", fixBaseURL(apiBaseURL)), { mode: "no-cors" }); 
               const foundModel = modelList.find((model) => model.id === id);
               if (foundModel && foundModel.display_name) {
                 title = foundModel.display_name;
@@ -721,7 +721,7 @@
                 currentLocalModels[index].apiKey = apiKey;
                 let title = id;
                 try {
-                  const modelList = await fetch(new URL("/models", fixBaseURL(apiBaseURL)), {
+                  const modelList = await fetch(new URL("models", fixBaseURL(apiBaseURL)), {
                     mode: "no-cors",
                   });
                   const foundModel = modelList.find((model) => model.id === id);
