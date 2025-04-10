@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         T3Chat++
 // @namespace    https://github.com/Yash-Singh1/UserScripts
-// @version      0.2
+// @version      0.3
 // @description  Adds BYOK, local models, and TPS counter to t3.chat
 // @author       Yash Singh
 // @match        https://t3.chat/*?*
@@ -81,6 +81,15 @@
     return JSON.parse(text);
   }
 
+  function fixBaseURL(baseURL) {
+    const uri = new URL(baseURL);
+    console.log(uri.pathname);
+    if (uri.pathname === "/") {
+      return uri.toString().replace(uri.hostname + "/", uri.hostname + "/v1/");
+    }
+    return baseURL;
+  }
+
   // TODO: implement reasoning somehow (not standardized anywhere)
   async function processOpenAIStream({
     stream: { apiBaseURL, apiKey, apiInput, modelId },
@@ -92,7 +101,7 @@
     // TODO: actually fetch title somehow
     onDataPart?.([{ content: { title: "Local LLM placeholder" } }]);
 
-    const response = await fetch(new URL("/v1/chat/completions", apiBaseURL), {
+    const response = await fetch(new URL("/chat/completions", fixBaseURL(apiBaseURL)), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -640,7 +649,7 @@
           if (id && apiBaseURL) {
             let title = id;
             try {
-              const modelList = await fetch(new URL("/v1/models", apiBaseURL), { mode: "no-cors" });
+              const modelList = await fetch(new URL("/models", fixBaseURL(apiBaseURL)), { mode: "no-cors" }); 
               const foundModel = modelList.find((model) => model.id === id);
               if (foundModel && foundModel.display_name) {
                 title = foundModel.display_name;
@@ -712,7 +721,7 @@
                 currentLocalModels[index].apiKey = apiKey;
                 let title = id;
                 try {
-                  const modelList = await fetch(new URL("/v1/models", apiBaseURL), {
+                  const modelList = await fetch(new URL("/models", fixBaseURL(apiBaseURL)), {
                     mode: "no-cors",
                   });
                   const foundModel = modelList.find((model) => model.id === id);
