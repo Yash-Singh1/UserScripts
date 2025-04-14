@@ -31,9 +31,7 @@
     const timer = setInterval(() => {
         const menuSelector = '.ytp-popup.ytp-contextmenu .ytp-panel .ytp-panel-menu';
         const ytmenu = document.querySelector(menuSelector);
-        console.log(ytmenu);
         if (ytmenu == null || ytmenu.querySelector('.ytp-menuitem .ytp-menuitem-label') == null) return;
-        console.log('done', ytmenu);
         clearInterval(timer);
         const thirdItem = ytmenu.querySelector('.ytp-menuitem:nth-child(3)');
         const newItem = thirdItem.cloneNode();
@@ -66,7 +64,6 @@
                 console.error(error);
             }
         });
-        console.log(newItem);
         thirdItem.parentNode.insertBefore(newItem, thirdItem.nextSibling);
     }, 100);
 })();
