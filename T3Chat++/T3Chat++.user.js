@@ -16,12 +16,18 @@
 // @grant        unsafeWindow
 // @sandbox      raw
 // @run-at       document-start
+// @require      https://raw.githubusercontent.com/Yash-Singh1/typescript-sdk/refs/heads/main/dist/web/web.js
 // ==/UserScript==
 
 (function () {
   "use strict";
 
   /* Note to self, you can set temperature, top-p, and top-k in localStorage */
+
+  const client = new mcp.Client({
+    name: "t3chat",
+    version: "0.0.0-dev",
+  });
 
   // Global map to track message id -> timestamp or TPS
   const messageTimes = new Map();
@@ -331,7 +337,7 @@
           dropdown.appendChild(option);
         }
         const confirmBtn = document.createElement("button");
-        confirmBtn.classList.add("__t3_chat_plus_confirmbtn");
+        confirmBtn.classList.add("__t3_chat_plus_modalbtn");
         confirmBtn.style.borderRadius = "4px";
         confirmBtn.innerText = "Confirm";
         confirmBtn.addEventListener("click", () => {
@@ -362,12 +368,12 @@
         modalContent.style.gap = "0.5rem";
         const style = document.createElement("style");
         style.innerHTML = `
-        .__t3_chat_plus_confirmbtn {
+        .__t3_chat_plus_modalbtn {
           background-color: hsl(var(--primary));
           transition-duration: 0.1s;
           cursor: pointer;
         }
-        .__t3_chat_plus_confirmbtn:hover {
+        .__t3_chat_plus_modalbtn:hover {
           background-color: hsla(var(--primary) / 0.7);
           transition-duration: 0.25s;
         }`;
@@ -382,10 +388,78 @@
     return false;
   }
 
-  function insertLocalModelsBtnWait(localModels, timeout = 10000) {
+  const T3_CHAT_MCP_BTN_ID = "__t3chat_plus_mcp_button";
+  let mcp_server_enabled = false;
+
+  function insertMCPBtn() {
+    const iterateForFormComponent = findFormComponentParent();
+    if (iterateForFormComponent && !document.getElementById(T3_CHAT_MCP_BTN_ID)) {
+      const modelSelector = iterateForFormComponent.querySelector('button[aria-haspopup="menu"]');
+      const modelSelectorParent = modelSelector.parentNode;
+      const mcpBtn = modelSelector.cloneNode(true);
+      mcpBtn.id = T3_CHAT_MCP_BTN_ID;
+      mcpBtn.removeChild(mcpBtn.querySelector("svg"));
+      mcpBtn.querySelector("span").innerText = "MCP";
+      mcpBtn.addEventListener("click", () => {
+        console.log("[T3Chat++] Selecting MCP Server");
+        const modal = popupModal();
+        const modalContent = modal.querySelector(`#${T3_CHAT_MODAL_CONTENT_ID}`);
+        const mcpServerInput = document.createElement("input");
+        mcpServerInput.placeholder = "Base URL of MCP Server";
+        const confirmBtn = document.createElement("button");
+        confirmBtn.classList.add("__t3_chat_plus_modalbtn");
+        confirmBtn.style.borderRadius = "4px";
+        confirmBtn.innerText = "Confirm";
+        confirmBtn.addEventListener("click", async () => {
+          const mcpServer = mcpServerInput.value;
+          if (mcpServer) {
+            await client.connect(new mcp.SSEClientTransport(new URL(mcpServer)));
+            mcp_server_enabled = false;
+          }
+          document.body.removeChild(document.getElementById(T3_CHAT_MODAL_ID));
+        });
+        const disconnectBtn = document.createElement("button");
+        disconnectBtn.classList.add("__t3_chat_plus_modalbtn");
+        disconnectBtn.style.borderRadius = "4px";
+        disconnectBtn.innerText = "Disconnect";
+        disconnectBtn.addEventListener("click", async () => {
+          mcp_server_enabled = false;
+          client.close();
+          document.body.removeChild(document.getElementById(T3_CHAT_MODAL_ID));
+        });
+        modalContent.style.display = "flex";
+        modalContent.style.flexDirection = "column";
+        modalContent.style.gap = "0.5rem";
+        const style = document.createElement("style");
+        style.innerHTML = `
+        .__t3_chat_plus_modalbtn {
+          background-color: hsl(var(--primary));
+          transition-duration: 0.1s;
+          cursor: pointer;
+        }
+        .__t3_chat_plus_modalbtn:hover {
+          background-color: hsla(var(--primary) / 0.7);
+          transition-duration: 0.25s;
+        }`;
+        modal.appendChild(style);
+        modalContent.appendChild(mcpServerInput);
+        modalContent.appendChild(confirmBtn);
+        modalContent.appendChild(disconnectBtn);
+        document.body.appendChild(modal);
+      });
+      modelSelectorParent.appendChild(mcpBtn);
+      return true;
+    }
+    return false;
+  }
+
+  function insertFormBtnsWait(localModels, timeout = 10000) {
     let counter = 0;
     const timerId = setInterval(() => {
-      if (insertLocalModelsBtn(localModels)) return clearInterval(timerId);
+      if (insertLocalModelsBtn(localModels)) {
+        // insertMCPBtn();
+        return clearInterval(timerId);
+      }
       counter++;
       if (counter >= timeout / 50) clearInterval(timerId);
     }, 50);
@@ -531,19 +605,50 @@
 
   function patchFetch() {
     const origFetch = unsafeWindow.fetch;
-    unsafeWindow.fetch = function (...args) {
-      if (local_enabled && (args[0].endsWith("/api/chat") || args?.[1].url === "/api/chat")) {
-        return new Promise((resolve) => {
-          const response = new Response(
-            JSON.stringify({ ...JSON.parse(args[1].body), model: local_set_model.id, local: true }),
-          );
-          Object.defineProperty(response.body, "local", { value: true });
-          Object.defineProperty(response.body, "modelInfo", { value: local_set_model });
-          resolve(response);
-        });
-      } else {
-        return origFetch.apply(this, args);
+    unsafeWindow.fetch = async function (...args) {
+      if (
+        args[0]?.url?.endsWith?.("/api/chat") ||
+        args[0]?.endsWith?.("/api/chat") ||
+        args?.[1]?.url?.endsWith("/api/chat")
+      ) {
+        if (mcp_server_enabled) {
+          const currentBody = JSON.parse(args[1].body);
+          args[1].body = JSON.stringify({
+            ...currentBody,
+            preferences: {
+              ...currentBody.preferences,
+              additionalInfo:
+                currentBody.additionalInfo +
+                `\nIn this environment you have access to a set of tools you can use to answer the user's question. Here are the functions available in JSONSchema format:
+
+${JSON.stringify(client.listTools(), null, 2)}
+
+When you need to use a tool, respond with a JSON object containing:
+- "tool_name": The name of the tool to use.
+- "parameters": A JSON object containing the parameters for the tool.
+
+This JSON object should be wrapped in a code block labelled as the json-mcp language
+
+Otherwise, answer the user normally.`,
+            },
+          });
+        }
+        if (local_enabled) {
+          return await new Promise((resolve) => {
+            const response = new Response(
+              JSON.stringify({
+                ...JSON.parse(args[1].body),
+                model: local_set_model.id,
+                local: true,
+              }),
+            );
+            Object.defineProperty(response.body, "local", { value: true });
+            Object.defineProperty(response.body, "modelInfo", { value: local_set_model });
+            resolve(response);
+          });
+        }
       }
+      return await origFetch(...args);
     };
     Object.defineProperty(unsafeWindow.fetch, "name", { value: origFetch.name });
     Object.defineProperty(unsafeWindow.fetch, "toString", { value: origFetch.toString });
@@ -600,7 +705,7 @@
     const currentLocalModels = JSON.parse(localStorage.getItem(LOCAL_MODELS_STORAGE_ID) || "[]");
     if (!location.pathname.startsWith("/settings/")) {
       await waitForElement("main");
-      insertLocalModelsBtnWait(currentLocalModels);
+      insertFormBtnsWait(currentLocalModels);
     }
     if (location.pathname === "/settings/models") {
       if (!document.getElementById(LOCAL_MODELS_UI_ID)) {
@@ -649,7 +754,9 @@
           if (id && apiBaseURL) {
             let title = id;
             try {
-              const modelList = await fetch(new URL("models", fixBaseURL(apiBaseURL)), { mode: "no-cors" }); 
+              const modelList = await fetch(new URL("models", fixBaseURL(apiBaseURL)), {
+                mode: "no-cors",
+              });
               const foundModel = modelList.find((model) => model.id === id);
               if (foundModel && foundModel.display_name) {
                 title = foundModel.display_name;
