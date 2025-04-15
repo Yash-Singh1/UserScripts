@@ -19,6 +19,8 @@
 // @require      https://raw.githubusercontent.com/Yash-Singh1/typescript-sdk/refs/heads/main/dist/web/web.js
 // ==/UserScript==
 
+/* global mcp */
+
 (function () {
   "use strict";
 
@@ -28,6 +30,7 @@
     name: "t3chat",
     version: "0.0.0-dev",
   });
+  unsafeWindow.__t3chat_debug_client = client;
 
   // Global map to track message id -> timestamp or TPS
   const messageTimes = new Map();
@@ -89,7 +92,7 @@
 
   function fixBaseURL(baseURL) {
     const uri = new URL(baseURL);
-    console.log(uri.pathname);
+    // console.log(uri.pathname);
     if (uri.pathname === "/") {
       return uri.toString().replace(uri.hostname + "/", uri.hostname + "/v1/");
     }
@@ -324,6 +327,7 @@
         const dropdown = document.createElement("select");
         dropdown.style.padding = "0.25rem";
         dropdown.style.borderRadius = "0.25rem";
+        dropdown.style.backgroundColor = "hsl(var(--primary) / 0.2)";
         dropdown.style.width = "40ch";
         for (const [index, localModel] of Object.entries(["None", ...localModels])) {
           const option = document.createElement("option");
@@ -405,7 +409,9 @@
         const modal = popupModal();
         const modalContent = modal.querySelector(`#${T3_CHAT_MODAL_CONTENT_ID}`);
         const mcpServerInput = document.createElement("input");
+        mcpServerInput.style.backgroundColor = "hsl(var(--primary) / 0.2)";
         mcpServerInput.placeholder = "Base URL of MCP Server";
+        mcpServerInput.style.width = mcpServerInput.placeholder.length + "ch";
         const confirmBtn = document.createElement("button");
         confirmBtn.classList.add("__t3_chat_plus_modalbtn");
         confirmBtn.style.borderRadius = "4px";
@@ -413,8 +419,8 @@
         confirmBtn.addEventListener("click", async () => {
           const mcpServer = mcpServerInput.value;
           if (mcpServer) {
-            await client.connect(new mcp.SSEClientTransport(new URL(mcpServer)));
-            mcp_server_enabled = false;
+            await client.connect(new mcp.SSEClientTransport(new URL("/sse", mcpServer)));
+            mcp_server_enabled = true;
           }
           document.body.removeChild(document.getElementById(T3_CHAT_MODAL_ID));
         });
@@ -613,21 +619,25 @@
       ) {
         if (mcp_server_enabled) {
           const currentBody = JSON.parse(args[1].body);
+          console.log(JSON.stringify(await client.listTools()).length);
           args[1].body = JSON.stringify({
             ...currentBody,
             preferences: {
               ...currentBody.preferences,
               additionalInfo:
-                currentBody.additionalInfo +
+                currentBody.preferences.additionalInfo +
                 `\nIn this environment you have access to a set of tools you can use to answer the user's question. Here are the functions available in JSONSchema format:
 
-${JSON.stringify(client.listTools(), null, 2)}
+${JSON.stringify(await client.listTools())}
 
-When you need to use a tool, respond with a JSON object containing:
-- "tool_name": The name of the tool to use.
-- "parameters": A JSON object containing the parameters for the tool.
+When you need to use a tool, respond with a JSON object wrapped in a code block labelled as the mcp language:
 
-This JSON object should be wrapped in a code block labelled as the json-mcp language
+\`\`\`mcp
+{
+  "tool_name": The name of the tool to use.,
+  "parameters": A JSON object containing the parameters for the tool
+}
+\`\`\`
 
 Otherwise, answer the user normally.`,
             },
