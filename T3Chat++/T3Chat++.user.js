@@ -2,7 +2,7 @@
 // @name         T3Chat++
 // @namespace    https://github.com/Yash-Singh1/UserScripts
 // @version      0.3
-// @description  Adds BYOK, local models, and TPS counter to t3.chat
+// @description  Adds BYOK, local models, MCP tool-calling, and TPS counter to t3.chat
 // @author       Yash Singh
 // @match        https://t3.chat/*?*
 // @match        https://t3.chat/*
@@ -99,6 +99,52 @@
     return baseURL;
   }
 
+  function scanForMCPBlocks() {
+    const reactPropKey = getReactPropKey();
+    for (const codeBlock of document.querySelectorAll("div.shiki > pre")) {
+      let lang;
+      try {
+        lang = codeBlock.parentNode.parentNode.parentNode.children.props
+          .split("-")
+          .slice(1)
+          .join("-");
+      } catch {
+        lang = codeBlock.parentNode.parentNode.querySelector("span").innerText;
+      }
+      if (
+        lang === "mcp" &&
+        !codeBlock.parentNode.parentNode.classList.contains("__t3_chat_tool_buttoned")
+      ) {
+        const spanParent = codeBlock.parentNode.parentNode.querySelector("span");
+        const btn = document.createElement("button");
+        btn.innerText = "Call Tool";
+        btn.style.marginLeft = "1rem";
+        btn.style.backgroundColor = "hsl(var(--primary) / 0.4)";
+        btn.style.padding = "0.1rem 0.75rem";
+        btn.style.fontSize = "smaller";
+        btn.style.borderRadius = "1rem";
+        btn.addEventListener("click", async () => {
+          const toolJSON = JSON.parse(codeBlock.innerText);
+          const result = await client.callTool(toolJSON);
+          const chatInput = document.querySelector("textarea");
+          let toolCallResult = result?.content;
+          if (toolCallResult) {
+            toolCallResult = toolCallResult.find((content) => content.type === "text").text;
+          } else {
+            toolCallResult = `\n\`\`\`json\n${JSON.stringify(result)}\`\`\`\n`;
+          }
+          // from wearifulpoet's https://greasyfork.org/en/scripts/529116-t3-chat-stt-with-whisper-api-configurable-api-key/code
+          if (chatInput) {
+            chatInput.value = `The result of the tool call to ${toolJSON.name}: ${toolCallResult}`;
+            chatInput.dispatchEvent(new Event("input", { bubbles: true }));
+          }
+        });
+        codeBlock.parentNode.parentNode.classList.add("__t3_chat_tool_buttoned");
+        spanParent.appendChild(btn);
+      }
+    }
+  }
+
   // TODO: implement reasoning somehow (not standardized anywhere)
   async function processOpenAIStream({
     stream: { apiBaseURL, apiKey, apiInput, modelId },
@@ -156,6 +202,7 @@
             finishReason: finish_reason,
             usage,
           });
+          if (mcp_server_enabled) scanForMCPBlocks();
           return;
         }
 
@@ -218,13 +265,18 @@
 
   const TPSID = "__t3_chat_plus_tps";
 
-  function findFormComponentParent() {
+  function getReactPropKey() {
     const reactPropKey = Object.keys(document.querySelector("main")).find((key) =>
       key.startsWith("__reactProps"),
     );
     if (!reactPropKey) {
       throw new Error("React Prop Key not found");
     }
+    return reactPropKey;
+  }
+
+  function findFormComponentParent() {
+    const reactPropKey = getReactPropKey();
     for (const inputBox of document.querySelectorAll("form")) {
       let iterateForFormComponent = inputBox;
       while (
@@ -411,7 +463,8 @@
         const mcpServerInput = document.createElement("input");
         mcpServerInput.style.backgroundColor = "hsl(var(--primary) / 0.2)";
         mcpServerInput.placeholder = "Base URL of MCP Server";
-        mcpServerInput.style.width = mcpServerInput.placeholder.length + "ch";
+        modalContent.style.width = mcpServerInput.placeholder.length + "ch";
+        mcpServerInput.style.width = "100%";
         const confirmBtn = document.createElement("button");
         confirmBtn.classList.add("__t3_chat_plus_modalbtn");
         confirmBtn.style.borderRadius = "4px";
@@ -446,12 +499,33 @@
         .__t3_chat_plus_modalbtn:hover {
           background-color: hsla(var(--primary) / 0.7);
           transition-duration: 0.25s;
+        }
+        .__t3_chat_plus_input_container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          position: relative;
+          column-gap: 8px;
+        }
+        .__t3_chat_plus_input_container > input {
+          padding: 0px 4px;
         }`;
         modal.appendChild(style);
-        modalContent.appendChild(mcpServerInput);
+        const inputContainer = document.createElement("div");
+        inputContainer.classList.add("__t3_chat_plus_input_container");
+        inputContainer.appendChild(mcpServerInput);
+        const note = document.createElement("p");
+        note.innerHTML =
+          'Note: You will have to run a <a href="https://github.com/Yash-Singh1/proxy-for-local-llm" style="color: #85C9E9; text-decoration: underline">proxy</a> that points to your MCP server in order to handle CORS';
+        note.style.color = "#ddd";
+        note.style.fontSize = "xx-small";
+        modalContent.appendChild(inputContainer);
         modalContent.appendChild(confirmBtn);
         modalContent.appendChild(disconnectBtn);
+        modalContent.appendChild(note);
         document.body.appendChild(modal);
+        mcpServerInput.focus();
       });
       modelSelectorParent.appendChild(mcpBtn);
       return true;
@@ -463,7 +537,7 @@
     let counter = 0;
     const timerId = setInterval(() => {
       if (insertLocalModelsBtn(localModels)) {
-        // insertMCPBtn();
+        insertMCPBtn();
         return clearInterval(timerId);
       }
       counter++;
@@ -507,6 +581,7 @@
                     const orig = opts.onFinishMessagePart;
                     opts.onFinishMessagePart = function (messagePart) {
                       try {
+                        if (mcp_server_enabled) scanForMCPBlocks();
                         const usage = messagePart?.usage;
                         const completionTokens = usage?.completionTokens;
                         if (typeof completionTokens === "number" && lastActiveMessageId != null) {
@@ -619,7 +694,6 @@
       ) {
         if (mcp_server_enabled) {
           const currentBody = JSON.parse(args[1].body);
-          console.log(JSON.stringify(await client.listTools()).length);
           args[1].body = JSON.stringify({
             ...currentBody,
             preferences: {
@@ -634,8 +708,8 @@ When you need to use a tool, respond with a JSON object wrapped in a code block 
 
 \`\`\`mcp
 {
-  "tool_name": The name of the tool to use.,
-  "parameters": A JSON object containing the parameters for the tool
+  "name": The name of the tool to use.,
+  "arguments": A JSON object containing the arguments passed to the tool
 }
 \`\`\`
 
