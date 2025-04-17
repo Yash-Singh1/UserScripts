@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         T3Chat++
 // @namespace    https://github.com/Yash-Singh1/UserScripts
-// @version      0.3
+// @version      0.4
 // @description  Adds BYOK, local models, MCP tool-calling, and TPS counter to t3.chat
 // @author       Yash Singh
 // @match        https://t3.chat/*?*
