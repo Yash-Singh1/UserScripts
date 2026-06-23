@@ -1,0 +1,4 @@
+interface:
+  display_name: 'Create Userscript'
+  short_description: 'Generate repo-style Tampermonkey scripts'
+  default_prompt: 'Use $create-userscript to add a Tampermonkey userscript to the current UserScripts repo.'

@@ -22,13 +22,13 @@
 /* global mcp */
 
 (function () {
-  "use strict";
+  'use strict';
 
   /* Note to self, you can set temperature, top-p, and top-k in localStorage */
 
   const client = new mcp.Client({
-    name: "t3chat",
-    version: "0.0.0-dev",
+    name: 't3chat',
+    version: '0.0.0-dev'
   });
   unsafeWindow.__t3chat_debug_client = client;
 
@@ -37,25 +37,25 @@
   let lastActiveMessageId = null;
 
   function setupHooks() {
-    console.log("[T3Chat++] Setting up Hooks!");
+    console.log('[T3Chat++] Setting up Hooks!');
     const messagesTable = unsafeWindow.dxdb?.messages;
     if (!messagesTable) {
-      console.error("[T3Chat++] messages table not found");
+      console.error('[T3Chat++] messages table not found');
       return;
     }
 
-    messagesTable.hook("creating", function (primKey) {
+    messagesTable.hook('creating', function (primKey) {
       messageTimes.set(primKey, null);
     });
 
-    messagesTable.hook("updating", function (mods, primKey) {
+    messagesTable.hook('updating', function (mods, primKey) {
       // TODO: fix thinking tokens to also be handled
-      if (mods?.status === "deleted" || mods?.status === "thinking") {
+      if (mods?.status === 'deleted' || mods?.status === 'thinking') {
         messageTimes.set(primKey, null);
         return;
       }
 
-      if (mods?.status === "streaming" && messageTimes.get(primKey) === null) {
+      if (mods?.status === 'streaming' && messageTimes.get(primKey) === null) {
         messageTimes.set(primKey, performance.now());
         lastActiveMessageId = primKey;
       }
@@ -93,53 +93,60 @@
   function fixBaseURL(baseURL) {
     const uri = new URL(baseURL);
     // console.log(uri.pathname);
-    if (uri.pathname === "/") {
-      return uri.toString().replace(uri.hostname + "/", uri.hostname + "/v1/");
+    if (uri.pathname === '/') {
+      return uri.toString().replace(uri.hostname + '/', uri.hostname + '/v1/');
     }
     return baseURL;
   }
 
   function scanForMCPBlocks() {
     const reactPropKey = getReactPropKey();
-    for (const codeBlock of document.querySelectorAll("div.shiki > pre")) {
+    for (const codeBlock of document.querySelectorAll('div.shiki > pre')) {
       let lang;
       try {
         lang = codeBlock.parentNode.parentNode.parentNode.children.props
-          .split("-")
+          .split('-')
           .slice(1)
-          .join("-");
+          .join('-');
       } catch {
-        lang = codeBlock.parentNode.parentNode.querySelector("span").innerText;
+        lang = codeBlock.parentNode.parentNode.querySelector('span').innerText;
       }
       if (
-        lang === "mcp" &&
-        !codeBlock.parentNode.parentNode.classList.contains("__t3_chat_tool_buttoned")
+        lang === 'mcp' &&
+        !codeBlock.parentNode.parentNode.classList.contains(
+          '__t3_chat_tool_buttoned'
+        )
       ) {
-        const spanParent = codeBlock.parentNode.parentNode.querySelector("span");
-        const btn = document.createElement("button");
-        btn.innerText = "Call Tool";
-        btn.style.marginLeft = "1rem";
-        btn.style.backgroundColor = "hsl(var(--primary) / 0.4)";
-        btn.style.padding = "0.1rem 0.75rem";
-        btn.style.fontSize = "smaller";
-        btn.style.borderRadius = "1rem";
-        btn.addEventListener("click", async () => {
+        const spanParent =
+          codeBlock.parentNode.parentNode.querySelector('span');
+        const btn = document.createElement('button');
+        btn.innerText = 'Call Tool';
+        btn.style.marginLeft = '1rem';
+        btn.style.backgroundColor = 'hsl(var(--primary) / 0.4)';
+        btn.style.padding = '0.1rem 0.75rem';
+        btn.style.fontSize = 'smaller';
+        btn.style.borderRadius = '1rem';
+        btn.addEventListener('click', async () => {
           const toolJSON = JSON.parse(codeBlock.innerText);
           const result = await client.callTool(toolJSON);
-          const chatInput = document.querySelector("textarea");
+          const chatInput = document.querySelector('textarea');
           let toolCallResult = result?.content;
           if (toolCallResult) {
-            toolCallResult = toolCallResult.find((content) => content.type === "text").text;
+            toolCallResult = toolCallResult.find(
+              (content) => content.type === 'text'
+            ).text;
           } else {
             toolCallResult = `\n\`\`\`json\n${JSON.stringify(result)}\`\`\`\n`;
           }
           // from wearifulpoet's https://greasyfork.org/en/scripts/529116-t3-chat-stt-with-whisper-api-configurable-api-key/code
           if (chatInput) {
             chatInput.value = `The result of the tool call to ${toolJSON.name}: ${toolCallResult}`;
-            chatInput.dispatchEvent(new Event("input", { bubbles: true }));
+            chatInput.dispatchEvent(new Event('input', { bubbles: true }));
           }
         });
-        codeBlock.parentNode.parentNode.classList.add("__t3_chat_tool_buttoned");
+        codeBlock.parentNode.parentNode.classList.add(
+          '__t3_chat_tool_buttoned'
+        );
         spanParent.appendChild(btn);
       }
     }
@@ -151,56 +158,61 @@
     onTextPart,
     onDataPart,
     onFinishMessagePart,
-    onErrorPart,
+    onErrorPart
   }) {
     // TODO: actually fetch title somehow
-    onDataPart?.([{ content: { title: "Local LLM placeholder" } }]);
+    onDataPart?.([{ content: { title: 'Local LLM placeholder' } }]);
 
-    const response = await fetch(new URL("chat/completions", fixBaseURL(apiBaseURL)), {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),
-      },
-      body: JSON.stringify({
-        model: modelId,
-        messages: apiInput.messages,
-        temperature: apiInput.temperature,
-        stream: true,
-        stream_options: {
-          include_usage: true,
+    const response = await fetch(
+      new URL('chat/completions', fixBaseURL(apiBaseURL)),
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {})
         },
-      }),
-    });
+        body: JSON.stringify({
+          model: modelId,
+          messages: apiInput.messages,
+          temperature: apiInput.temperature,
+          stream: true,
+          stream_options: {
+            include_usage: true
+          }
+        })
+      }
+    );
 
     if (!response.ok || !response.body) {
-      throw new Error(`API error: ${response.status}\n${await response.text()}`);
+      throw new Error(
+        `API error: ${response.status}\n${await response.text()}`
+      );
     }
 
     const reader = response.body.getReader();
     const decoder = new TextDecoder();
-    let buffer = "";
+    let buffer = '';
 
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
       buffer += decoder.decode(value, { stream: true });
 
-      const lines = buffer.split("\n");
-      buffer = lines.pop() ?? "";
+      const lines = buffer.split('\n');
+      buffer = lines.pop() ?? '';
       let finish_reason = null;
       let usage = undefined;
 
       for (const line of lines) {
         const trimmed = line.trim();
-        if (!trimmed || !trimmed.startsWith("data:")) continue;
+        if (!trimmed || !trimmed.startsWith('data:')) continue;
 
         const data = trimmed.slice(5).trim();
-        if (data === "[DONE]") {
+        if (data === '[DONE]') {
           // End of stream
           await onFinishMessagePart?.({
             finishReason: finish_reason,
-            usage,
+            usage
           });
           if (mcp_server_enabled) scanForMCPBlocks();
           return;
@@ -263,28 +275,31 @@
     }
   }
 
-  const TPSID = "__t3_chat_plus_tps";
+  const TPSID = '__t3_chat_plus_tps';
 
   function getReactPropKey() {
-    const reactPropKey = Object.keys(document.querySelector("main")).find((key) =>
-      key.startsWith("__reactProps"),
+    const reactPropKey = Object.keys(document.querySelector('main')).find(
+      (key) => key.startsWith('__reactProps')
     );
     if (!reactPropKey) {
-      throw new Error("React Prop Key not found");
+      throw new Error('React Prop Key not found');
     }
     return reactPropKey;
   }
 
   function findFormComponentParent() {
     const reactPropKey = getReactPropKey();
-    for (const inputBox of document.querySelectorAll("form")) {
+    for (const inputBox of document.querySelectorAll('form')) {
       let iterateForFormComponent = inputBox;
       while (
         iterateForFormComponent &&
         (!iterateForFormComponent?.[reactPropKey]?.children?.props ||
-          !Object.hasOwn(iterateForFormComponent?.[reactPropKey]?.children?.props, "model")) &&
+          !Object.hasOwn(
+            iterateForFormComponent?.[reactPropKey]?.children?.props,
+            'model'
+          )) &&
         !iterateForFormComponent?.[reactPropKey]?.children?.find?.(
-          (child) => child?.props && Object.hasOwn(child.props, "model"),
+          (child) => child?.props && Object.hasOwn(child.props, 'model')
         )
       ) {
         iterateForFormComponent = iterateForFormComponent.parentNode;
@@ -298,93 +313,103 @@
   function insertTPS(tps) {
     let tpsel;
     if ((tpsel = document.getElementById(TPSID))) {
-      tpsel.innerText = tps + "tps";
+      tpsel.innerText = tps + 'tps';
       return;
     }
     const iterateForFormComponent = findFormComponentParent();
     if (iterateForFormComponent) {
-      tpsel = document.createElement("p");
-      tpsel.innerText = tps + "tps";
-      tpsel.style.fontSize = "0.75rem";
-      tpsel.style.marginBottom = "0.25rem";
-      tpsel.style.marginLeft = "0.5rem";
-      tpsel.style.textAlign = "start";
+      tpsel = document.createElement('p');
+      tpsel.innerText = tps + 'tps';
+      tpsel.style.fontSize = '0.75rem';
+      tpsel.style.marginBottom = '0.25rem';
+      tpsel.style.marginLeft = '0.5rem';
+      tpsel.style.textAlign = 'start';
       tpsel.id = TPSID;
       iterateForFormComponent.prepend(tpsel);
     }
   }
 
-  const T3_CHAT_MODAL_ID = "__t3chat_plus_modal";
-  const T3_CHAT_MODAL_CONTENT_ID = "__t3chat_plus_modal_content";
+  const T3_CHAT_MODAL_ID = '__t3chat_plus_modal';
+  const T3_CHAT_MODAL_CONTENT_ID = '__t3chat_plus_modal_content';
   function popupModal() {
     if (document.getElementById(T3_CHAT_MODAL_ID)) {
-      document.getElementById(T3_CHAT_MODAL_ID).style.display = "flex";
+      document.getElementById(T3_CHAT_MODAL_ID).style.display = 'flex';
       return document.getElementById(T3_CHAT_MODAL_ID);
     }
-    const modalWrapperDiv = document.createElement("div");
+    const modalWrapperDiv = document.createElement('div');
     modalWrapperDiv.id = T3_CHAT_MODAL_ID;
-    modalWrapperDiv.style.backgroundColor = "rgba(0, 0, 0, 0.4)";
-    modalWrapperDiv.style.width = "100vw";
-    modalWrapperDiv.style.height = "100vh";
-    modalWrapperDiv.style.zIndex = "9999999";
-    modalWrapperDiv.style.position = "absolute";
+    modalWrapperDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.4)';
+    modalWrapperDiv.style.width = '100vw';
+    modalWrapperDiv.style.height = '100vh';
+    modalWrapperDiv.style.zIndex = '9999999';
+    modalWrapperDiv.style.position = 'absolute';
     modalWrapperDiv.style.top = 0;
     modalWrapperDiv.style.left = 0;
-    modalWrapperDiv.style.display = "flex";
-    modalWrapperDiv.style.justifyContent = "center";
-    modalWrapperDiv.style.alignItems = "center";
-    const modalDiv = document.createElement("div");
-    modalDiv.style.width = "max-content";
-    modalDiv.style.height = "max-content";
-    modalDiv.style.padding = "2rem 4rem";
-    modalDiv.style.backgroundColor = "hsl(var(--chat-background))";
-    modalDiv.style.borderRadius = "0.5rem";
-    modalDiv.style.position = "relative";
-    const closeSVG = document.createElement("button");
-    closeSVG.addEventListener("click", () => {
+    modalWrapperDiv.style.display = 'flex';
+    modalWrapperDiv.style.justifyContent = 'center';
+    modalWrapperDiv.style.alignItems = 'center';
+    const modalDiv = document.createElement('div');
+    modalDiv.style.width = 'max-content';
+    modalDiv.style.height = 'max-content';
+    modalDiv.style.padding = '2rem 4rem';
+    modalDiv.style.backgroundColor = 'hsl(var(--chat-background))';
+    modalDiv.style.borderRadius = '0.5rem';
+    modalDiv.style.position = 'relative';
+    const closeSVG = document.createElement('button');
+    closeSVG.addEventListener('click', () => {
       document.body.removeChild(document.getElementById(T3_CHAT_MODAL_ID));
     });
     modalDiv.appendChild(closeSVG);
-    closeSVG.style.position = "absolute";
-    closeSVG.style.top = "8px";
-    closeSVG.style.right = "8px";
-    closeSVG.style.cursor = "pointer";
+    closeSVG.style.position = 'absolute';
+    closeSVG.style.top = '8px';
+    closeSVG.style.right = '8px';
+    closeSVG.style.cursor = 'pointer';
     // style="position: absolute; top: 8; right: 8; cursor: pointer;"
     closeSVG.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>`;
-    const content = document.createElement("div");
+    const content = document.createElement('div');
     content.id = T3_CHAT_MODAL_CONTENT_ID;
     modalDiv.appendChild(content);
     modalWrapperDiv.appendChild(modalDiv);
     return modalWrapperDiv;
   }
 
-  const T3_CHAT_LOCAL_MODELS_BTN_ID = "__t3chat_plus_localmodel_button";
+  const T3_CHAT_LOCAL_MODELS_BTN_ID = '__t3chat_plus_localmodel_button';
   let local_enabled = false;
-  let local_set_model = "none";
+  let local_set_model = 'none';
 
   function insertLocalModelsBtn(localModels) {
     const iterateForFormComponent = findFormComponentParent();
-    if (iterateForFormComponent && !document.getElementById(T3_CHAT_LOCAL_MODELS_BTN_ID)) {
-      const modelSelector = iterateForFormComponent.querySelector('button[aria-haspopup="menu"]');
+    if (
+      iterateForFormComponent &&
+      !document.getElementById(T3_CHAT_LOCAL_MODELS_BTN_ID)
+    ) {
+      const modelSelector = iterateForFormComponent.querySelector(
+        'button[aria-haspopup="menu"]'
+      );
       const modelSelectorParent = modelSelector.parentNode;
       const localModelsBtn = modelSelector.cloneNode(true);
       localModelsBtn.id = T3_CHAT_LOCAL_MODELS_BTN_ID;
-      localModelsBtn.removeChild(localModelsBtn.querySelector("svg"));
-      localModelsBtn.querySelector("span").innerText = "Local Models";
-      localModelsBtn.addEventListener("click", () => {
-        console.log("[T3Chat++] Selecting local models");
+      localModelsBtn.removeChild(localModelsBtn.querySelector('svg'));
+      localModelsBtn.querySelector('span').innerText = 'Local Models';
+      localModelsBtn.addEventListener('click', () => {
+        console.log('[T3Chat++] Selecting local models');
         const modal = popupModal();
-        const modalContent = modal.querySelector(`#${T3_CHAT_MODAL_CONTENT_ID}`);
+        const modalContent = modal.querySelector(
+          `#${T3_CHAT_MODAL_CONTENT_ID}`
+        );
         // modal.querySelector(`#${T3_CHAT_MODAL_CONTENT_ID}`).innerText = "hi";
-        const dropdown = document.createElement("select");
-        dropdown.style.padding = "0.25rem";
-        dropdown.style.borderRadius = "0.25rem";
-        dropdown.style.backgroundColor = "hsl(var(--primary) / 0.2)";
-        dropdown.style.width = "40ch";
-        for (const [index, localModel] of Object.entries(["None", ...localModels])) {
-          const option = document.createElement("option");
-          if (localModel === "None") {
-            option.value = "none";
+        const dropdown = document.createElement('select');
+        dropdown.style.padding = '0.25rem';
+        dropdown.style.borderRadius = '0.25rem';
+        dropdown.style.backgroundColor = 'hsl(var(--primary) / 0.2)';
+        dropdown.style.width = '40ch';
+        for (const [index, localModel] of Object.entries([
+          'None',
+          ...localModels
+        ])) {
+          const option = document.createElement('option');
+          if (localModel === 'None') {
+            option.value = 'none';
             option.innerText = localModel;
           } else {
             option.value = index.toString();
@@ -392,37 +417,41 @@
           }
           dropdown.appendChild(option);
         }
-        const confirmBtn = document.createElement("button");
-        confirmBtn.classList.add("__t3_chat_plus_modalbtn");
-        confirmBtn.style.borderRadius = "4px";
-        confirmBtn.innerText = "Confirm";
-        confirmBtn.addEventListener("click", () => {
+        const confirmBtn = document.createElement('button');
+        confirmBtn.classList.add('__t3_chat_plus_modalbtn');
+        confirmBtn.style.borderRadius = '4px';
+        confirmBtn.innerText = 'Confirm';
+        confirmBtn.addEventListener('click', () => {
           // console.log(dropdown.value, localModels[Number(dropdown.value) - 1]);
-          if (dropdown.value === "none") {
+          if (dropdown.value === 'none') {
             local_enabled = false;
           } else {
             local_set_model = localModels[Number(dropdown.value) - 1];
             local_enabled = true;
-            const currentSetModel = modelSelector.querySelector("span").innerText;
-            modelSelector.querySelector("span").innerText = local_set_model.id;
+            const currentSetModel =
+              modelSelector.querySelector('span').innerText;
+            modelSelector.querySelector('span').innerText = local_set_model.id;
             // TODO: make this more friendly by only changing when the span changes with a MutationObserver
             let disabled_local_model = false;
-            modelSelector.addEventListener("click", () => {
+            modelSelector.addEventListener('click', () => {
               if (disabled_local_model) return;
               local_enabled = false;
               disabled_local_model = true;
-              if (modelSelector.querySelector("span").innerText == local_set_model.id) {
-                modelSelector.querySelector("span").innerText = currentSetModel;
+              if (
+                modelSelector.querySelector('span').innerText ==
+                local_set_model.id
+              ) {
+                modelSelector.querySelector('span').innerText = currentSetModel;
               }
             });
             // TODO: fix the generated by msg
           }
           document.body.removeChild(document.getElementById(T3_CHAT_MODAL_ID));
         });
-        modalContent.style.display = "flex";
-        modalContent.style.flexDirection = "column";
-        modalContent.style.gap = "0.5rem";
-        const style = document.createElement("style");
+        modalContent.style.display = 'flex';
+        modalContent.style.flexDirection = 'column';
+        modalContent.style.gap = '0.5rem';
+        const style = document.createElement('style');
         style.innerHTML = `
         .__t3_chat_plus_modalbtn {
           background-color: hsl(var(--primary));
@@ -444,52 +473,61 @@
     return false;
   }
 
-  const T3_CHAT_MCP_BTN_ID = "__t3chat_plus_mcp_button";
+  const T3_CHAT_MCP_BTN_ID = '__t3chat_plus_mcp_button';
   let mcp_server_enabled = false;
 
   function insertMCPBtn() {
     const iterateForFormComponent = findFormComponentParent();
-    if (iterateForFormComponent && !document.getElementById(T3_CHAT_MCP_BTN_ID)) {
-      const modelSelector = iterateForFormComponent.querySelector('button[aria-haspopup="menu"]');
+    if (
+      iterateForFormComponent &&
+      !document.getElementById(T3_CHAT_MCP_BTN_ID)
+    ) {
+      const modelSelector = iterateForFormComponent.querySelector(
+        'button[aria-haspopup="menu"]'
+      );
       const modelSelectorParent = modelSelector.parentNode;
       const mcpBtn = modelSelector.cloneNode(true);
       mcpBtn.id = T3_CHAT_MCP_BTN_ID;
-      mcpBtn.removeChild(mcpBtn.querySelector("svg"));
-      mcpBtn.querySelector("span").innerText = "MCP";
-      mcpBtn.addEventListener("click", () => {
-        console.log("[T3Chat++] Selecting MCP Server");
+      mcpBtn.removeChild(mcpBtn.querySelector('svg'));
+      mcpBtn.querySelector('span').innerText = 'MCP';
+      mcpBtn.addEventListener('click', () => {
+        console.log('[T3Chat++] Selecting MCP Server');
         const modal = popupModal();
-        const modalContent = modal.querySelector(`#${T3_CHAT_MODAL_CONTENT_ID}`);
-        const mcpServerInput = document.createElement("input");
-        mcpServerInput.style.backgroundColor = "hsl(var(--primary) / 0.2)";
-        mcpServerInput.placeholder = "Base URL of MCP Server";
-        modalContent.style.width = mcpServerInput.placeholder.length + "ch";
-        mcpServerInput.style.width = "100%";
-        const confirmBtn = document.createElement("button");
-        confirmBtn.classList.add("__t3_chat_plus_modalbtn");
-        confirmBtn.style.borderRadius = "4px";
-        confirmBtn.innerText = "Confirm";
-        confirmBtn.addEventListener("click", async () => {
+        const modalContent = modal.querySelector(
+          `#${T3_CHAT_MODAL_CONTENT_ID}`
+        );
+        const mcpServerInput = document.createElement('input');
+        mcpServerInput.style.backgroundColor = 'hsl(var(--primary) / 0.2)';
+        mcpServerInput.placeholder = 'Base URL of MCP Server';
+        modalContent.style.width = mcpServerInput.placeholder.length + 'ch';
+        mcpServerInput.style.width = '100%';
+        const confirmBtn = document.createElement('button');
+        confirmBtn.classList.add('__t3_chat_plus_modalbtn');
+        confirmBtn.style.borderRadius = '4px';
+        confirmBtn.innerText = 'Confirm';
+        confirmBtn.addEventListener('click', async () => {
           const mcpServer = mcpServerInput.value;
           if (mcpServer) {
-            await client.connect(new mcp.SSEClientTransport(new URL("/sse", mcpServer)));
+            await client.connect(
+              new mcp.SSEClientTransport(new URL('/sse', mcpServer))
+            );
             mcp_server_enabled = true;
           }
           document.body.removeChild(document.getElementById(T3_CHAT_MODAL_ID));
         });
-        const disconnectBtn = document.createElement("button");
-        disconnectBtn.classList.add("__t3_chat_plus_modalbtn");
-        disconnectBtn.style.borderRadius = "4px";
-        disconnectBtn.innerText = "Disconnect";
-        disconnectBtn.addEventListener("click", async () => {
+        const disconnectBtn = document.createElement('button');
+        disconnectBtn.classList.add('__t3_chat_plus_modalbtn');
+        disconnectBtn.style.borderRadius = '4px';
+        disconnectBtn.innerText = 'Disconnect';
+        disconnectBtn.addEventListener('click', async () => {
           mcp_server_enabled = false;
           client.close();
           document.body.removeChild(document.getElementById(T3_CHAT_MODAL_ID));
         });
-        modalContent.style.display = "flex";
-        modalContent.style.flexDirection = "column";
-        modalContent.style.gap = "0.5rem";
-        const style = document.createElement("style");
+        modalContent.style.display = 'flex';
+        modalContent.style.flexDirection = 'column';
+        modalContent.style.gap = '0.5rem';
+        const style = document.createElement('style');
         style.innerHTML = `
         .__t3_chat_plus_modalbtn {
           background-color: hsl(var(--primary));
@@ -512,14 +550,14 @@
           padding: 0px 4px;
         }`;
         modal.appendChild(style);
-        const inputContainer = document.createElement("div");
-        inputContainer.classList.add("__t3_chat_plus_input_container");
+        const inputContainer = document.createElement('div');
+        inputContainer.classList.add('__t3_chat_plus_input_container');
         inputContainer.appendChild(mcpServerInput);
-        const note = document.createElement("p");
+        const note = document.createElement('p');
         note.innerHTML =
           'Note: You will have to run a <a href="https://github.com/Yash-Singh1/proxy-for-local-llm" style="color: #85C9E9; text-decoration: underline">proxy</a> that points to your MCP server in order to handle CORS';
-        note.style.color = "#ddd";
-        note.style.fontSize = "xx-small";
+        note.style.color = '#ddd';
+        note.style.fontSize = 'xx-small';
         modalContent.appendChild(inputContainer);
         modalContent.appendChild(confirmBtn);
         modalContent.appendChild(disconnectBtn);
@@ -547,16 +585,16 @@
 
   function patchModuleFactories(modules) {
     for (const [chunkId, factory] of Object.entries(modules)) {
-      if (typeof factory !== "function") continue;
+      if (typeof factory !== 'function') continue;
 
       const factoryStr = factory.toString();
 
       if (
-        factoryStr.includes("onFinishMessagePart") &&
-        factoryStr.includes("async function") &&
-        factoryStr.includes("getReader")
+        factoryStr.includes('onFinishMessagePart') &&
+        factoryStr.includes('async function') &&
+        factoryStr.includes('getReader')
       ) {
-        console.log("[T3Chat++] Patching streaming module:", chunkId);
+        console.log('[T3Chat++] Patching streaming module:', chunkId);
 
         modules[chunkId] = function patchedFactory(module, exports, require) {
           const returnValue = factory.call(this, module, exports, require);
@@ -568,14 +606,18 @@
           let exportFound = false;
           for (const key of Object.keys(originalModuleExports)) {
             const exported = originalModuleExports[key];
-            if (typeof exported === "function" && exported.length === 1 && !exportFound) {
-              console.log("[T3Chat++] patching exported function", exported);
+            if (
+              typeof exported === 'function' &&
+              exported.length === 1 &&
+              !exportFound
+            ) {
+              console.log('[T3Chat++] patching exported function', exported);
               Object.defineProperty(module.exports, key, {
                 value: async function wrapped(opts) {
                   // Wrap onFinishMessagePart first so localModels also get tps measurement
                   if (
                     opts &&
-                    typeof opts.onFinishMessagePart === "function" &&
+                    typeof opts.onFinishMessagePart === 'function' &&
                     !opts.onFinishMessagePart._wrapped
                   ) {
                     const orig = opts.onFinishMessagePart;
@@ -584,20 +626,26 @@
                         if (mcp_server_enabled) scanForMCPBlocks();
                         const usage = messagePart?.usage;
                         const completionTokens = usage?.completionTokens;
-                        if (typeof completionTokens === "number" && lastActiveMessageId != null) {
-                          const startTime = messageTimes.get(lastActiveMessageId);
-                          if (typeof startTime === "number") {
+                        if (
+                          typeof completionTokens === 'number' &&
+                          lastActiveMessageId != null
+                        ) {
+                          const startTime =
+                            messageTimes.get(lastActiveMessageId);
+                          if (typeof startTime === 'number') {
                             const elapsed = performance.now() - startTime;
                             const tps = completionTokens / (elapsed / 1000);
                             messageTimes.set(lastActiveMessageId, tps);
                             console.log(
-                              `[T3Chat++] Message ${lastActiveMessageId} TPS: ${tps.toFixed(2)}`,
+                              `[T3Chat++] Message ${lastActiveMessageId} TPS: ${tps.toFixed(
+                                2
+                              )}`
                             );
                             insertTPS(tps.toFixed(2));
                           }
                         }
                       } catch (e) {
-                        console.warn("Error calculating TPS", e);
+                        console.warn('Error calculating TPS', e);
                       }
                       return orig.apply(this, arguments);
                     };
@@ -606,7 +654,7 @@
                       opts &&
                       opts.stream &&
                       opts.stream?.local &&
-                      typeof opts.stream.local === "boolean" &&
+                      typeof opts.stream.local === 'boolean' &&
                       opts.stream.local === true
                     ) {
                       return await processOpenAIStream({
@@ -615,13 +663,13 @@
                           apiInput: await readStreamAsJSON(opts.stream),
                           apiKey: opts.stream.modelInfo.apiKey,
                           apiBaseURL: opts.stream.modelInfo.apiBaseURL,
-                          modelId: opts.stream.modelInfo.id,
-                        },
+                          modelId: opts.stream.modelInfo.id
+                        }
                       });
                     }
                   }
                   return await exported.call(this, opts);
-                },
+                }
               });
               exportFound = true;
             } else {
@@ -642,30 +690,30 @@
         const modules = args[0][1];
         patchModuleFactories(modules);
       } catch (e) {
-        console.warn("Error patching chunk modules", e);
+        console.warn('Error patching chunk modules', e);
       }
       return origPush.apply(webpackChunk_N_E2, args);
     };
-    Object.defineProperty(patchedPush, "toString", {
-      value: Array.prototype.push.toString,
+    Object.defineProperty(patchedPush, 'toString', {
+      value: Array.prototype.push.toString
     });
-    Object.defineProperty(patchedPush, "name", {
-      value: Array.prototype.push.name,
+    Object.defineProperty(patchedPush, 'name', {
+      value: Array.prototype.push.name
     });
 
-    Object.defineProperty(value, "push", {
+    Object.defineProperty(value, 'push', {
       configurable: true,
       get() {
         return patchedPush;
       },
       set(newPush) {
         patchPush(value, newPush);
-      },
+      }
     });
   }
 
   let webpackChunk_N_E2 = undefined;
-  Object.defineProperty(unsafeWindow, "webpackChunk_N_E", {
+  Object.defineProperty(unsafeWindow, 'webpackChunk_N_E', {
     configurable: true,
     get() {
       return webpackChunk_N_E2;
@@ -673,7 +721,7 @@
     set(value) {
       patchPush(value, value.push);
       webpackChunk_N_E2 = value;
-    },
+    }
   });
 
   function waitForDxdb() {
@@ -688,9 +736,9 @@
     const origFetch = unsafeWindow.fetch;
     unsafeWindow.fetch = async function (...args) {
       if (
-        args[0]?.url?.endsWith?.("/api/chat") ||
-        args[0]?.endsWith?.("/api/chat") ||
-        args?.[1]?.url?.endsWith("/api/chat")
+        args[0]?.url?.endsWith?.('/api/chat') ||
+        args[0]?.endsWith?.('/api/chat') ||
+        args?.[1]?.url?.endsWith('/api/chat')
       ) {
         if (mcp_server_enabled) {
           const currentBody = JSON.parse(args[1].body);
@@ -713,8 +761,8 @@ When you need to use a tool, respond with a JSON object wrapped in a code block 
 }
 \`\`\`
 
-Otherwise, answer the user normally.`,
-            },
+Otherwise, answer the user normally.`
+            }
           });
         }
         if (local_enabled) {
@@ -723,19 +771,25 @@ Otherwise, answer the user normally.`,
               JSON.stringify({
                 ...JSON.parse(args[1].body),
                 model: local_set_model.id,
-                local: true,
-              }),
+                local: true
+              })
             );
-            Object.defineProperty(response.body, "local", { value: true });
-            Object.defineProperty(response.body, "modelInfo", { value: local_set_model });
+            Object.defineProperty(response.body, 'local', { value: true });
+            Object.defineProperty(response.body, 'modelInfo', {
+              value: local_set_model
+            });
             resolve(response);
           });
         }
       }
       return await origFetch(...args);
     };
-    Object.defineProperty(unsafeWindow.fetch, "name", { value: origFetch.name });
-    Object.defineProperty(unsafeWindow.fetch, "toString", { value: origFetch.toString });
+    Object.defineProperty(unsafeWindow.fetch, 'name', {
+      value: origFetch.name
+    });
+    Object.defineProperty(unsafeWindow.fetch, 'toString', {
+      value: origFetch.toString
+    });
   }
 
   /*
@@ -765,46 +819,50 @@ Otherwise, answer the user normally.`,
   // Override pushState
   unsafeWindow.history.pushState = function (...args) {
     const result = originalPushState.apply(this, args);
-    unsafeWindow.dispatchEvent(new Event("pushstate"));
-    unsafeWindow.dispatchEvent(new Event("historystatechanged"));
+    unsafeWindow.dispatchEvent(new Event('pushstate'));
+    unsafeWindow.dispatchEvent(new Event('historystatechanged'));
     return result;
   };
 
   // Override replaceState
   unsafeWindow.history.replaceState = function (...args) {
     const result = originalReplaceState.apply(this, args);
-    unsafeWindow.dispatchEvent(new Event("replacestate"));
-    unsafeWindow.dispatchEvent(new Event("historystatechanged"));
+    unsafeWindow.dispatchEvent(new Event('replacestate'));
+    unsafeWindow.dispatchEvent(new Event('historystatechanged'));
     return result;
   };
 
   // Popstate event listener
-  unsafeWindow.addEventListener("popstate", () => {
-    window.dispatchEvent(new Event("historystatechanged"));
+  unsafeWindow.addEventListener('popstate', () => {
+    window.dispatchEvent(new Event('historystatechanged'));
   });
 
-  const LOCAL_MODELS_UI_ID = "__t3_chat_plus_localmodels";
-  const LOCAL_MODELS_STORAGE_ID = "__t3_chat_plus_localmodels";
-  unsafeWindow.addEventListener("historystatechanged", async () => {
-    const currentLocalModels = JSON.parse(localStorage.getItem(LOCAL_MODELS_STORAGE_ID) || "[]");
-    if (!location.pathname.startsWith("/settings/")) {
-      await waitForElement("main");
+  const LOCAL_MODELS_UI_ID = '__t3_chat_plus_localmodels';
+  const LOCAL_MODELS_STORAGE_ID = '__t3_chat_plus_localmodels';
+  unsafeWindow.addEventListener('historystatechanged', async () => {
+    const currentLocalModels = JSON.parse(
+      localStorage.getItem(LOCAL_MODELS_STORAGE_ID) || '[]'
+    );
+    if (!location.pathname.startsWith('/settings/')) {
+      await waitForElement('main');
       insertFormBtnsWait(currentLocalModels);
     }
-    if (location.pathname === "/settings/models") {
+    if (location.pathname === '/settings/models') {
       if (!document.getElementById(LOCAL_MODELS_UI_ID)) {
         let currentTab = null;
         while (currentTab === null) {
           await new Promise((resolve) => setTimeout(resolve, 100));
-          currentTab = document.querySelector('div[role="tablist"] ~ div[data-state="active"]');
+          currentTab = document.querySelector(
+            'div[role="tablist"] ~ div[data-state="active"]'
+          );
         }
-        const mainTabFrame = currentTab.querySelector("div");
+        const mainTabFrame = currentTab.querySelector('div');
         const localModelTabFrame = mainTabFrame.cloneNode(/* deep = */ true);
         localModelTabFrame.id = LOCAL_MODELS_UI_ID;
-        localModelTabFrame.querySelector("h2").innerText = "Custom Models";
-        localModelTabFrame.querySelector("p").innerText =
-          "Choose custom and local models with your own configured providers.";
-        const styles = document.createElement("style");
+        localModelTabFrame.querySelector('h2').innerText = 'Custom Models';
+        localModelTabFrame.querySelector('p').innerText =
+          'Choose custom and local models with your own configured providers.';
+        const styles = document.createElement('style');
         styles.innerText = `
           #__t3_chat_plus_localmodels button:not(.__t3chat_plus_button) {
             cursor: not-allowed;
@@ -814,8 +872,8 @@ Otherwise, answer the user normally.`,
         localModelTabFrame.appendChild(styles);
 
         let filterBtn = null;
-        for (const btn of localModelTabFrame.querySelectorAll("button")) {
-          if (btn.innerText.toLowerCase().includes("filter by features")) {
+        for (const btn of localModelTabFrame.querySelectorAll('button')) {
+          if (btn.innerText.toLowerCase().includes('filter by features')) {
             filterBtn = btn;
             break;
           }
@@ -823,69 +881,100 @@ Otherwise, answer the user normally.`,
         const addBtn = filterBtn.cloneNode(true);
         const addBtnParent = filterBtn.parentNode;
         filterBtn.parentNode.removeChild(filterBtn);
-        addBtn.innerText = "Add new model";
-        addBtn.classList.add("__t3chat_plus_button");
+        addBtn.innerText = 'Add new model';
+        addBtn.classList.add('__t3chat_plus_button');
 
-        function promptModelInfo(defaultID = "", defaultBaseURL = "", defaultAPIKey = "") {
-          const id = window.prompt("Model ID", defaultID);
-          const apiBaseURL = window.prompt("Provider Base URL", defaultBaseURL);
-          const apiKey = window.prompt("API Key (optional)", defaultAPIKey);
+        function promptModelInfo(
+          defaultID = '',
+          defaultBaseURL = '',
+          defaultAPIKey = ''
+        ) {
+          const id = window.prompt('Model ID', defaultID);
+          const apiBaseURL = window.prompt('Provider Base URL', defaultBaseURL);
+          const apiKey = window.prompt('API Key (optional)', defaultAPIKey);
           return { id, apiBaseURL, apiKey };
         }
 
-        addBtn.addEventListener("click", async () => {
+        addBtn.addEventListener('click', async () => {
           const { id, apiBaseURL, apiKey } = promptModelInfo();
           if (id && apiBaseURL) {
             let title = id;
             try {
-              const modelList = await fetch(new URL("models", fixBaseURL(apiBaseURL)), {
-                mode: "no-cors",
-              });
+              const modelList = await fetch(
+                new URL('models', fixBaseURL(apiBaseURL)),
+                {
+                  mode: 'no-cors'
+                }
+              );
               const foundModel = modelList.find((model) => model.id === id);
               if (foundModel && foundModel.display_name) {
                 title = foundModel.display_name;
               }
             } catch {}
-            currentLocalModels.push({ id, apiBaseURL, apiKey, title, enabled: true });
-            localStorage.setItem(LOCAL_MODELS_STORAGE_ID, JSON.stringify(currentLocalModels));
+            currentLocalModels.push({
+              id,
+              apiBaseURL,
+              apiKey,
+              title,
+              enabled: true
+            });
+            localStorage.setItem(
+              LOCAL_MODELS_STORAGE_ID,
+              JSON.stringify(currentLocalModels)
+            );
             renderLocalModels();
-            alert("Successfully added model!");
+            alert('Successfully added model!');
           }
         });
         addBtnParent.appendChild(addBtn);
 
-        const scrollContainer = localModelTabFrame.querySelector("div.overflow-y-auto");
-        const modelCard = scrollContainer.children[0].cloneNode(/* deep = */ true);
-        scrollContainer.innerHTML = "";
+        const scrollContainer = localModelTabFrame.querySelector(
+          'div.overflow-y-auto'
+        );
+        const modelCard = scrollContainer.children[0].cloneNode(
+          /* deep = */ true
+        );
+        scrollContainer.innerHTML = '';
 
         // Quasar Alpha SVG
-        modelCard.querySelector("svg").parentNode.innerHTML =
-          `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="h-full w-full" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house-icon lucide-house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>`;
+        modelCard.querySelector(
+          'svg'
+        ).parentNode.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="h-full w-full" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house-icon lucide-house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>`;
         function renderLocalModels() {
-          scrollContainer.innerHTML = "";
-          for (const [index, currentLocalModel] of Object.entries(currentLocalModels)) {
-            const currentLocalModelCard = modelCard.cloneNode(/* deep = */ true);
+          scrollContainer.innerHTML = '';
+          for (const [index, currentLocalModel] of Object.entries(
+            currentLocalModels
+          )) {
+            const currentLocalModelCard = modelCard.cloneNode(
+              /* deep = */ true
+            );
 
             // Model info
-            currentLocalModelCard.querySelector("h3").parentNode.innerHTML =
-              `<h3>${currentLocalModel.title
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;")}</h3>`;
-            currentLocalModelCard.querySelector("p").innerText =
-              `Model: ${currentLocalModel.id}, Provider: ${currentLocalModel.apiBaseURL}`;
+            currentLocalModelCard.querySelector(
+              'h3'
+            ).parentNode.innerHTML = `<h3>${currentLocalModel.title
+              .replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .replace(/"/g, '&quot;')
+              .replace(/'/g, '&#039;')}</h3>`;
+            currentLocalModelCard.querySelector(
+              'p'
+            ).innerText = `Model: ${currentLocalModel.id}, Provider: ${currentLocalModel.apiBaseURL}`;
             currentLocalModelCard
-              .querySelector("p")
+              .querySelector('p')
               .parentNode.removeChild(
-                currentLocalModelCard.querySelector("p").parentNode.querySelector("button"),
+                currentLocalModelCard
+                  .querySelector('p')
+                  .parentNode.querySelector('button')
               );
 
             // Button to edit model
             let searchButton = null;
-            for (const btn of currentLocalModelCard.querySelectorAll("button")) {
-              if (btn.innerText.toLowerCase().includes("search url")) {
+            for (const btn of currentLocalModelCard.querySelectorAll(
+              'button'
+            )) {
+              if (btn.innerText.toLowerCase().includes('search url')) {
                 searchButton = btn;
                 break;
               }
@@ -893,18 +982,18 @@ Otherwise, answer the user normally.`,
             const editButton = searchButton.cloneNode(true);
             const deleteButton = searchButton.cloneNode(true);
             const editButtonParentParent = searchButton.parentNode;
-            const editButtonParent = document.createElement("div");
+            const editButtonParent = document.createElement('div');
             searchButton.parentNode.removeChild(searchButton);
-            editButton.innerText = "Edit";
-            const editButtonSvg = document.createElement("svg");
+            editButton.innerText = 'Edit';
+            const editButtonSvg = document.createElement('svg');
             editButton.prepend(editButtonSvg);
             editButtonSvg.outerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-icon lucide-pencil"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>`;
-            editButton.classList.add("__t3chat_plus_button");
-            editButton.addEventListener("click", async () => {
+            editButton.classList.add('__t3chat_plus_button');
+            editButton.addEventListener('click', async () => {
               const { id, apiBaseURL, apiKey } = promptModelInfo(
                 currentLocalModel.id,
                 currentLocalModel.apiBaseURL,
-                currentLocalModel.apiKey,
+                currentLocalModel.apiKey
               );
               if (id && apiBaseURL) {
                 currentLocalModels[index].id = id;
@@ -912,50 +1001,65 @@ Otherwise, answer the user normally.`,
                 currentLocalModels[index].apiKey = apiKey;
                 let title = id;
                 try {
-                  const modelList = await fetch(new URL("models", fixBaseURL(apiBaseURL)), {
-                    mode: "no-cors",
-                  });
+                  const modelList = await fetch(
+                    new URL('models', fixBaseURL(apiBaseURL)),
+                    {
+                      mode: 'no-cors'
+                    }
+                  );
                   const foundModel = modelList.find((model) => model.id === id);
                   if (foundModel && foundModel.display_name) {
                     title = foundModel.display_name;
                   }
                 } catch {}
                 currentLocalModels[index].title = title;
-                localStorage.setItem(LOCAL_MODELS_STORAGE_ID, JSON.stringify(currentLocalModels));
+                localStorage.setItem(
+                  LOCAL_MODELS_STORAGE_ID,
+                  JSON.stringify(currentLocalModels)
+                );
                 renderLocalModels();
               }
             });
             editButtonParent.appendChild(editButton);
-            deleteButton.innerText = "Delete";
-            const deleteButtonSvg = document.createElement("svg");
+            deleteButton.innerText = 'Delete';
+            const deleteButtonSvg = document.createElement('svg');
             deleteButton.prepend(deleteButtonSvg);
             deleteButtonSvg.outerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash2-icon lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>`;
-            deleteButton.classList.add("__t3chat_plus_button");
-            deleteButton.addEventListener("click", () => {
+            deleteButton.classList.add('__t3chat_plus_button');
+            deleteButton.addEventListener('click', () => {
               currentLocalModels = [
                 ...currentLocalModes.slice(0, index),
-                ...currentLocalModels.slice(index + 1),
+                ...currentLocalModels.slice(index + 1)
               ];
-              localStorage.setItem(LOCAL_MODELS_STORAGE_ID, JSON.stringify(currentLocalModels));
+              localStorage.setItem(
+                LOCAL_MODELS_STORAGE_ID,
+                JSON.stringify(currentLocalModels)
+              );
               renderLocalModels();
             });
             editButtonParent.appendChild(deleteButton);
-            editButtonParent.style.display = "flex";
-            editButtonParent.style.flexDirection = "row";
+            editButtonParent.style.display = 'flex';
+            editButtonParent.style.flexDirection = 'row';
             editButtonParentParent.appendChild(editButtonParent);
 
             for (const editButtonSibling of editButtonParentParent.children) {
               if (editButtonSibling !== editButtonParent) {
-                editButtonSibling.style.visibility = "hidden";
+                editButtonSibling.style.visibility = 'hidden';
               }
             }
 
-            const switchBtn = currentLocalModelCard.querySelector('button[role="switch"]');
-            switchBtn.classList.add("__t3chat_plus_button");
+            const switchBtn = currentLocalModelCard.querySelector(
+              'button[role="switch"]'
+            );
+            switchBtn.classList.add('__t3chat_plus_button');
             setSwitchState(switchBtn, currentLocalModel.enabled);
-            switchBtn.addEventListener("click", () => {
-              currentLocalModels[index].enabled = !currentLocalModels[index].enabled;
-              localStorage.setItem(LOCAL_MODELS_STORAGE_ID, JSON.stringify(currentLocalModels));
+            switchBtn.addEventListener('click', () => {
+              currentLocalModels[index].enabled =
+                !currentLocalModels[index].enabled;
+              localStorage.setItem(
+                LOCAL_MODELS_STORAGE_ID,
+                JSON.stringify(currentLocalModels)
+              );
               setSwitchState(switchBtn, currentLocalModels[index].enabled);
             });
 
@@ -989,7 +1093,7 @@ Otherwise, answer the user normally.`,
 
       observer.observe(document.documentElement, {
         childList: true,
-        subtree: true,
+        subtree: true
       });
 
       if (timeout) {
@@ -1002,11 +1106,14 @@ Otherwise, answer the user normally.`,
   }
 
   function setSwitchState(switchBtn, switchEnabled) {
-    switchBtn.setAttribute("aria-checked", switchEnabled.toString());
-    switchBtn.setAttribute("data-state", switchEnabled ? "checked" : "unchecked");
+    switchBtn.setAttribute('aria-checked', switchEnabled.toString());
+    switchBtn.setAttribute(
+      'data-state',
+      switchEnabled ? 'checked' : 'unchecked'
+    );
     switchBtn
-      .querySelector("span")
-      .setAttribute("data-state", switchEnabled ? "checked" : "unchecked");
+      .querySelector('span')
+      .setAttribute('data-state', switchEnabled ? 'checked' : 'unchecked');
   }
 
   patchFetch();
